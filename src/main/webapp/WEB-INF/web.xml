@@ -14,6 +14,10 @@
     <servlet-name>Login</servlet-name>
     <servlet-class>org.servlets.Login</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>Api</servlet-name>
+    <servlet-class>org.servlets.Api</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>Home</servlet-name>
@@ -22,5 +26,9 @@
   <servlet-mapping>
     <servlet-name>Login</servlet-name>
     <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Api</servlet-name>
+    <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
 </web-app>
