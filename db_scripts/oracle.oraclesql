@@ -1,0 +1,21 @@
+SELECT * FROM user_tables;
+CREATE TABLE proj01_emps (
+  id NUMBER,
+  manager NUMBER,
+  email VARCHAR2(50),
+  uname VARCHAR2(50),
+  passwd VARCHAR2(50)
+);
+
+CREATE TABLE proj01_reimb_req (
+  id NUMBER,
+  emp_id NUMBER,
+  req_amnt NUMBER
+);
+
+ALTER TABLE proj01_emps
+ADD CONSTRAINT proj01_emps_id_pk PRIMARY KEY(id);
+
+ALTER TABLE proj01_reimb_req
+ADD CONSTRAINT proj01_reimb_req_empId_fk FOREIGN KEY(emp_id)
+REFERENCES proj01_emps(id) ON DELETE CASCADE;

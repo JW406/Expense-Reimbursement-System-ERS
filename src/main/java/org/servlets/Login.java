@@ -1,6 +1,7 @@
 package org.servlets;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,5 +17,9 @@ public class Login extends HttpServlet {
   }
 
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    for (Enumeration<?> e = req.getParameterNames(); e.hasMoreElements();) {
+      String key = (String)(e.nextElement());
+      System.out.println(key + " " + req.getParameter(key));
+    }
   }
 }
