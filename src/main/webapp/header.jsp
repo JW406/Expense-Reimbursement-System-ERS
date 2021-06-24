@@ -10,6 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="resources/libraries/css/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/css/custom.css">
     <title>Employee Management System</title>
   </head>
   <body>
