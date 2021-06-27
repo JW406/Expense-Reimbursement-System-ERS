@@ -8,14 +8,6 @@ function mock(data, time = 0) {
 
 let isAdmin = false
 
-function populateUserInfo() {
-  const navUserName = $('.user-name')
-  mock({ name: 'Jayden', isAdmin: true }).then((data) => {
-    isAdmin = data['isAdmin']
-    navUserName.html(`${data['name']} <span class="caret"></span>`)
-  })
-}
-
 function populateTable() {
   const thead = $('.reimbursement-table thead tr')
   ;['Employee Name', 'Request Amount', 'Actions'].forEach((name) => {
@@ -60,7 +52,6 @@ function populateTable() {
 }
 
 $(() => {
-  populateUserInfo()
   populateTable()
   fetch(window.__ctx + '/api/requeststable')
     .then((resp) => resp.json())

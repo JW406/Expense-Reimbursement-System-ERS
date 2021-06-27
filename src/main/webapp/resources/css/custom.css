@@ -27,3 +27,10 @@ body {
   left: unset;
   right: 0;
 }
+
+.err-msg {
+  height: 1.6rem;
+  line-height: 1.6rem;
+  margin: 0.5rem 0;
+  color: red;
+}

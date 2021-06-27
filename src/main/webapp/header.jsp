@@ -10,6 +10,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="resources/libraries/js/jquery-3.5.1.slim.min.js"></script>
   <link rel="stylesheet" href="resources/libraries/css/bootstrap.min.css">
   <link rel="stylesheet" href="resources/css/custom.css">
   <script>window.__ctx='<%=request.getContextPath()%>'</script>
@@ -38,16 +39,10 @@
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle user-name" href="#" id="navbarDropdown" role="button"
+            <a class="nav-link user-name" href="#" id="navbarDropdown" role="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Login
             </a>
-            <div class="dropdown-menu aria-labelledby=" navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
           </li>
         </ul>
   </nav>
