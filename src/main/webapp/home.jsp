@@ -10,24 +10,4 @@
       <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
     </div>
   </div>
-  <script>
-    $(() => {
-      const navUserName = $('.user-name')
-      navUserName.addClass('dropdown-toggle')
-      const username = window.localStorage.getItem('username')
-      if (username != null && username !== "") {
-        navUserName.html('')
-        navUserName.append($('<span>').html(username))
-        navUserName.append('<span class="caret"></span>')
-        navUserName.parent().append(`
-<div class="dropdown-menu aria-labelledby=" navbarDropdown">
-<a class="dropdown-item" href="#">Action</a>
-<a class="dropdown-item" href="#">Another action</a>
-<div class="dropdown-divider"></div>
-<a class="dropdown-item" href="#">Something else here</a>
-</div>
-        `)
-      }
-    })
-  </script>
   <jsp:include page="footer.jsp" />

@@ -12,6 +12,10 @@ public class Requests extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    req.getRequestDispatcher("requests.jsp").forward(req, resp);
+    if (req.getSession().getAttribute("email") == null) {
+      resp.sendRedirect("login");
+    } else {
+      req.getRequestDispatcher("requests.jsp").forward(req, resp);
+    }
   }
 }

@@ -13,36 +13,61 @@
   <script src="resources/libraries/js/jquery-3.5.1.slim.min.js"></script>
   <link rel="stylesheet" href="resources/libraries/css/bootstrap.min.css">
   <link rel="stylesheet" href="resources/css/custom.css">
-  <script>window.__ctx='<%=request.getContextPath()%>'</script>
+  <script>window.__ctx = '<%=request.getContextPath()%>'</script>
+  <script>
+    $(() => {
+      if (window.location.pathname === window.__ctx + '/login') {
+        return
+      }
+      const username = window.localStorage.getItem('username')
+      if (username != null && username !== "") {
+        const navUserName = $('.user-name')
+        navUserName.addClass('dropdown-toggle')
+        navUserName.attr('data-toggle','dropdown')
+        navUserName.attr('aria-haspopup', 'true')
+        navUserName.attr('aria-expanded', 'false')
+        navUserName.html('')
+        navUserName.append($('<span>').html(username))
+        navUserName.append('<span class="caret"></span>')
+        navUserName.parent().append(`
+<div class="dropdown-menu aria-labelledby=" navbarDropdown">
+<a class="dropdown-item" href="#">Action</a>
+<a class="dropdown-item" href="#">Another action</a>
+<div class="dropdown-divider"></div>
+<button class="dropdown-item logout-btn">Logout</button>
+</div>
+`)
+      }
+    })
+  </script>
   <title>Employee Management System</title>
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="<%=request.getContextPath()%>/home">Reimbursement System</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <a class="navbar-brand" href="<%=request.getContextPath()%>/home">Reimbursement System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="<%=request.getContextPath()%>/home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="<%=request.getContextPath()%>/requests">View Requests</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">View All Employees</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav">
-          <li class="nav-item dropdown">
-            <a class="nav-link user-name" href="#" id="navbarDropdown" role="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Login
-            </a>
-          </li>
-        </ul>
+    <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="<%=request.getContextPath()%>/home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<%=request.getContextPath()%>/requests">View Requests</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">View All Employees</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a href="<%=request.getContextPath()%>/login" class="nav-link user-name" id="navbarDropdown" role="button">
+            Login
+          </a>
+        </li>
+      </ul>
   </nav>

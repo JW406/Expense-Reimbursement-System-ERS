@@ -44,6 +44,8 @@ public class Api extends HttpServlet {
     PrintWriter out = resp.getWriter();
     if (Utils.apiEndPointMatch(req, "requestsTable")) {
       out.print("{\"foo\":\"bar\"}");
+    } else if (Utils.apiEndPointMatch(req, "logout")) {
+      req.getSession().removeAttribute("email");
     }
     out.close();
   }
