@@ -11,35 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.Utils;
-
-class User {
-  private String name;
-  private Integer age;
-
-  public User() {
-  }
-
-  public User(String name, Integer age) {
-    this.name = name;
-    this.age = age;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Integer getAge() {
-    return age;
-  }
-
-  public void setAge(Integer age) {
-    this.age = age;
-  }
-}
+import org.RestModels.LoginCredentials;
+import org.RestModels.LoginResponse;
 
 public class Api extends HttpServlet {
   private static final long serialVersionUID = 1L;
@@ -49,11 +22,17 @@ public class Api extends HttpServlet {
     PrintWriter out = resp.getWriter();
     if (Utils.apiEndPointMatch(req, "login")) {
       String body = Utils.readReqBody(req);
-      User user = new User("foo", 16);
       ObjectMapper mapper = new ObjectMapper();
-      String userjson = mapper.writeValueAsString(user);
-      out.println(userjson);
-      out.println(body);
+      LoginCredentials loginCredentials = mapper.readValue(body, LoginCredentials.class);
+      LoginResponse loginResponse = new LoginResponse();
+      if (loginCredentials.getEmail().equals("a@a.com") && loginCredentials.getPassword().equals("a")) {
+        loginResponse.setIsSuccess(true);
+        loginResponse.setMsg("Login Success");
+      } else {
+        loginResponse.setIsSuccess(false);
+        loginResponse.setMsg("Invalid email or password");
+      }
+      out.print(mapper.writeValueAsString(loginResponse));
     }
     out.close();
   }
