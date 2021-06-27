@@ -13,9 +13,9 @@ public class Home extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     if (req.getSession().getAttribute("email") == null) {
-      resp.sendRedirect("login");
+      resp.sendRedirect(req.getContextPath() + "/login");
     } else {
-      req.getRequestDispatcher("home.jsp").forward(req, resp);
+      req.getRequestDispatcher("/home.jsp").forward(req, resp);
     }
   }
 }
