@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 final public class Utils {
   public static Boolean apiEndPointMatch(HttpServletRequest req, String seg) {
     String[] _endPoint = req.getRequestURI().split("api/");
-    String endPoint = _endPoint[_endPoint.length - 1];
+    String endPoint = _endPoint[1];
     endPoint = endPoint.toLowerCase().intern();
-    return endPoint.startsWith(seg);
+    return endPoint.startsWith(seg.toLowerCase().intern());
   }
 
   public static String readReqBody(HttpServletRequest req) {

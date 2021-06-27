@@ -62,4 +62,9 @@ function populateTable() {
 $(() => {
   populateUserInfo()
   populateTable()
+  fetch(window.__ctx + '/api/requeststable')
+    .then((resp) => resp.json())
+    .then((d) => {
+      console.log(d)
+    })
 })
