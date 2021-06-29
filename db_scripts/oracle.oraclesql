@@ -1,4 +1,6 @@
 SELECT * FROM user_tables;
+SELECT * FROM testobject_test_;
+select * from ALL_CONSTRAINTS where TABLE_NAME in ('TESTOBJECT_TEST_');
 DROP TABLE proj01_reimb_req;
 DROP TABLE proj01_emps;
 

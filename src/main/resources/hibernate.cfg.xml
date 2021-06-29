@@ -27,9 +27,9 @@
     - update - only update schema diffs
     - none - default, don't do it
     -->
-    <!-- <property name="hibernate.hbm2ddl.auto">none</property> -->
+    <property name="hibernate.hbm2ddl.auto">none</property>
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
-    <property name="hibernate.hbm2ddl.auto">create</property>
+    <!-- <property name="hibernate.hbm2ddl.auto">create</property> -->
     <mapping class="org.models.TestObject"/>
   </session-factory>
 </hibernate-configuration>
