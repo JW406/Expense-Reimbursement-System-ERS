@@ -14,7 +14,7 @@
 
     <!-- driver spec-->
     <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-    <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.Oracle8iDialect</property>
 
     <!-- make things nice-->
     <property name="hibernate.show_sql">true</property>
@@ -27,9 +27,10 @@
     - update - only update schema diffs
     - none - default, don't do it
     -->
-    <property name="hibernate.hbm2ddl.auto">none</property>
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
-    <!-- <property name="hibernate.hbm2ddl.auto">create</property> -->
-    <mapping class="org.models.TestObject"/>
+    <property name="hibernate.hbm2ddl.auto">create</property>
+    <mapping class="org.models.Employee"/>
+    <mapping class="org.models.Manager"/>
+    <mapping class="org.models.ReimbursementRequest"/>
   </session-factory>
 </hibernate-configuration>

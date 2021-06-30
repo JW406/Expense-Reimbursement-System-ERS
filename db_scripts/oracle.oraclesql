@@ -1,25 +1,11 @@
 SELECT * FROM user_tables;
 SELECT * FROM testobject_test_;
 select * from ALL_CONSTRAINTS where TABLE_NAME in ('TESTOBJECT_TEST_');
+SELECT * FROM user_tables where TABLE_NAME like 'PROJ01_%';
+
+select * from PROJ01_EMPS;
+select * from PROJ01_MGRS;
+select * from PROJ01_REIMB_REQ;
+SELECT DBMS_METADATA.GET_DDL('TABLE','PROJ01_MGRS') FROM DUAL;
 DROP TABLE proj01_reimb_req;
 DROP TABLE proj01_emps;
-
-CREATE TABLE proj01_emps (
-  id NUMBER,
-  manager NUMBER,
-  email VARCHAR2(50),
-  uname VARCHAR2(50),
-  passwd VARCHAR2(50),
-  CONSTRAINT pk_emps_id PRIMARY KEY(id),
-  CONSTRAINT fk_emps_id FOREIGN KEY(manager) REFERENCES proj01_emps(id)
-);
-
-CREATE TABLE proj01_reimb_req (
-  id NUMBER,
-  emp_id NUMBER,
-  req_amnt NUMBER,
-  approved_by NUMBER,
-  CONSTRAINT pk_reimb_req_id PRIMARY KEY(id),
-  CONSTRAINT fk_reimb_req_empId_fk FOREIGN KEY(emp_id) REFERENCES proj01_emps(id) ON DELETE CASCADE,
-  CONSTRAINT fk_reimb_req_approved_by FOREIGN KEY(approved_by) REFERENCES proj01_emps(id)
-);
