@@ -14,14 +14,18 @@ import org.Utils;
 import org.RestModels.LoginCredentials;
 import org.RestModels.LoginResponse;
 import org.RestModels.RegisterCredentials;
+import org.RestModels.SubmitReimbursementRequest;
 import org.RestModels.Response;
 import org.models.Person;
-import org.services.AccountServices;
-import org.services.AccountServicesImpl;
+import org.services.Impl.AccountServicesImpl;
+import org.services.Impl.ReimbursementServiceImpl;
+import org.services.Interface.AccountServices;
+import org.services.Interface.ReimbursementService;
 
 public class Api extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final AccountServices accServ = new AccountServicesImpl();
+  private static final ReimbursementService reimServ = new ReimbursementServiceImpl();
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -54,6 +58,19 @@ public class Api extends HttpServlet {
       } else {
         response.setIsSuccess(false);
         response.setMsg("Register failed");
+      }
+      out.print(mapper.writeValueAsString(response));
+
+    } else if (Utils.apiEndPointMatch(req, "submit-request")) {
+      String body = Utils.readReqBody(req);
+      SubmitReimbursementRequest rr = mapper.readValue(body, SubmitReimbursementRequest.class);
+      Response response = new Response();
+      if (reimServ.acceptReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
+        response.setIsSuccess(true);
+        response.setMsg("Reimbursement request sent");
+      } else {
+        response.setIsSuccess(false);
+        response.setMsg("Reimbursement request not sent");
       }
       out.print(mapper.writeValueAsString(response));
     }

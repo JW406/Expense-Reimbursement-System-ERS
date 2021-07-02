@@ -1,4 +1,4 @@
-package org.services;
+package org.services.Interface;
 
 import org.RestModels.LoginCredentials;
 import org.RestModels.RegisterCredentials;

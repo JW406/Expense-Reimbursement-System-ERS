@@ -3,20 +3,27 @@
   <div class="container">
     <div class="row-no-gutters">
       <div class="col-xs-12">
-        <ul class="nav nav-tabs mt-3">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Active</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Approved</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Declined</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Recalled</a>
-          </li>
-        </ul>
+        <div class="mt-3 d-flex justify-content-between">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Active</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Approved</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Declined</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Recalled</a>
+            </li>
+          </ul>
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link btn btn-success btn-sm" href="<%=request.getContextPath()%>/new_request">New</a>
+            </li>
+          </ul>
+        </div>
         <div class="table-responsive">
           <table class="table table-sm reimbursement-table">
             <thead>

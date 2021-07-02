@@ -1,5 +1,7 @@
 package org.services;
 
+import java.util.List;
+
 import org.DBUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -56,5 +58,28 @@ public class Service {
     sess.close();
 
     return res;
+  }
+
+  public static Employee getEmployeeRecordByEmail(String email) {
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+
+    int idx = 0;
+    try {
+      List<?> employees = sess.createQuery("from Employee where email = ?1").setParameter(++idx, email).list();
+      tx.commit();
+      sess.close();
+      if (employees.size() > 0) {
+        return (Employee) employees.get(0);
+      }
+    } catch (Exception e) {
+      // TODO: use logger
+      System.out.println(e.getMessage());
+    }
+
+    tx.commit();
+    sess.close();
+
+    return null;
   }
 }

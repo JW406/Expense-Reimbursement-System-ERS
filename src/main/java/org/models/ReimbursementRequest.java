@@ -1,5 +1,7 @@
 package org.models;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "proj01_reimb_req")
@@ -20,14 +24,25 @@ public class ReimbursementRequest {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJ01_REIMB_REQ_SEQ")
   @SequenceGenerator(name = "PROJ01_REIMB_REQ_SEQ", sequenceName = "PROJ01_REIMB_REQ_S", allocationSize = 1)
   private Integer id;
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
   @JoinColumn(name = "requested_by", referencedColumnName = "id")
   private Employee requestedbyEmployee;
   @Column(name = "request_amnt")
   private Double reqAmnt;
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "approved_by", referencedColumnName = "id")
   private Manager approvedByManager;
+  @Column
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date tsDate;
+
+  public Date getTsDate() {
+    return tsDate;
+  }
+
+  public void setTsDate(Date tsDate) {
+    this.tsDate = tsDate;
+  }
 
   public Integer getId() {
     return id;
@@ -64,6 +79,6 @@ public class ReimbursementRequest {
   @Override
   public String toString() {
     return "ReimbursementRequest [approvedByManager=" + approvedByManager + ", id=" + id + ", reqAmnt=" + reqAmnt
-        + ", requestedbyEmployee=" + requestedbyEmployee + "]";
+        + ", requestedbyEmployee=" + requestedbyEmployee + ", tsDate=" + tsDate + "]";
   }
 }
