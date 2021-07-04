@@ -8,7 +8,7 @@
         <label for="request-amnt">Request Amount</label>
         <div class="d-flex">
           <span style="height:38px;line-height:38px;margin-right:5px;">$</span>
-          <input type="text" class="form-control" id="request-amnt">
+          <input type="text" class="form-control" id="request-amnt" autofocus>
         </div>
       </div>
     </div>

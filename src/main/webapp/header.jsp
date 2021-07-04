@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/libraries/css/bootstrap.min.css">
   <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/custom.css">
   <script>window.__ctx = '<%=request.getContextPath()%>'</script>
+  <script src="<%=request.getContextPath()%>/resources/scripts/utils.js"></script>
   <script>
     $(() => {
       if (window.location.pathname === window.__ctx + '/login') {
