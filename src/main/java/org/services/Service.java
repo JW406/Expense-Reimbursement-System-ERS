@@ -41,7 +41,7 @@ public class Service {
 
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setReqAmnt(amnt);
-    reimbursementRequest.setRequestedbyEmployee(e);
+    reimbursementRequest.setRequestedByEmployee(e);
     sess.save(reimbursementRequest);
 
     tx.commit();

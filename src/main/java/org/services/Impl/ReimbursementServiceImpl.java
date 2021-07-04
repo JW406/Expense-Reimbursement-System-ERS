@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
 import org.models.ReimbursementRequest;
+import org.models.ReimbursementState;
 import org.services.Service;
 import org.services.Interface.ReimbursementService;
 
@@ -22,7 +23,8 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
       reimbursementRequest.setTsDate(new Date(rr.getTimestamp()));
       reimbursementRequest.setReqAmnt(rr.getRequestAmnt());
-      reimbursementRequest.setRequestedbyEmployee(Service.getEmployeeRecordByEmail(email));
+      reimbursementRequest.setRequestedByEmployee(Service.getEmployeeRecordByEmail(email));
+      reimbursementRequest.setState(ReimbursementState.active);
       System.out.println(reimbursementRequest);
       sess.save(reimbursementRequest);
 
