@@ -11,12 +11,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "proj01_emps")
 public class Employee extends Person {
+  @JsonIgnore
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJ01_EMP_SEQ")
   @SequenceGenerator(name = "PROJ01_EMP_SEQ", sequenceName = "PROJ01_EMP_S", allocationSize = 1)
