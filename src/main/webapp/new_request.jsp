@@ -22,7 +22,9 @@
     $('.err-msg').text('')
     const requestAmnt = ev.target['request-amnt'].value
     let decimalSignIdx = -1
-    if ((decimalSignIdx = requestAmnt.indexOf('.')) > -1 && requestAmnt.length - decimalSignIdx > 3) {
+    if (!$.isNumeric(requestAmnt)) {
+      $('.err-msg').text('Numbers only')
+    } else if ((decimalSignIdx = requestAmnt.indexOf('.')) > -1 && requestAmnt.length - decimalSignIdx > 3) {
       $('.err-msg').text('Only 2 digits after the dot')
     } else {
       fetch(window.__ctx + '/api/submit-request', {

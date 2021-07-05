@@ -37,12 +37,33 @@
   </div>
   <script>
     let isAdmin = false
+    let tbody
 
-    const thead = $('.reimbursement-table thead tr')
-      ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
-        thead.append(`<th class="w-33">\${name}</th>`)
-      })
-    const tbody = $('.reimbursement-table tbody')
+    $(() => {
+      const thead = $('.reimbursement-table thead tr')
+        ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
+          thead.append(`<th class="w-33">\${name}</th>`)
+        })
+      tbody = $('.reimbursement-table tbody')
+    })
+
+    function requestActions(state) {
+      return (e) => {
+        const id = e.target.dataset['id']
+        fetch(window.__ctx + '/api/request-update', {
+          method: 'POST',
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify({ id, state }),
+        }
+        ).then((resp) => resp.json()).then((data) => {
+          if (data['isSuccess']) {
+            window.location.reload()
+          }
+        })
+      }
+    }
 
     function tab(state) {
       tbody.html('')
@@ -53,26 +74,35 @@
         if (data == null || !data.length) { return }
         tbody.html('')
         for (const d of data) {
-          console.log(d)
           const row = $('<tr>')
           row.append(`<td class="active w-33">\${dateFmt("yyyy-MM-dd hh:mm:ss", new Date(d['tsDate']))}</td>`)
           row.append(`<td class="success w-33">\$\${d['reqAmnt']}</td>`)
           const actionCell = $('<td class="w-33">')
           if (isAdmin) {
             actionCell.append(
-              '<button type="button" class="btn btn-primary btn-sm mr-2">Approve</button>'
+              `<button type="button" class="btn btn-primary btn-sm mr-2 btn-approve" data-id="\${d['id']}">Approve</button>`
             )
             actionCell.append(
-              '<button type="button" class="btn btn-danger btn-sm">Decline</button>'
+              `<button type="button" class="btn btn-danger btn-sm btn-decline" data-id="\${d['id']}">Decline</button>`
             )
           } else {
-            actionCell.append(
-              '<button type="button" class="btn btn-primary btn-sm">Recall</button>'
-            )
+            if (state === 'active') {
+              actionCell.append(
+                `<button type="button" class="btn btn-primary btn-sm btn-recall" data-id="\${d['id']}">Recall</button>`
+              )
+            } else if (state === 'recalled') {
+              actionCell.append(
+                `<button type="button" class="btn btn-primary btn-sm btn-resend" data-id="\${d['id']}">Resend</button>`
+              )
+            }
           }
           row.append(actionCell)
           tbody.append(row)
         }
+        tbody.find('.btn-approve').click(requestActions('approved'))
+        tbody.find('.btn-decline').click(requestActions('declined'))
+        tbody.find('.btn-recall').click(requestActions('recalled'))
+        tbody.find('.btn-resend').click(requestActions('active'))
       })
     }
 
@@ -91,7 +121,6 @@
           }
         }, 0)
       })
-
     })
   </script>
   <jsp:include page="footer.jsp" />
