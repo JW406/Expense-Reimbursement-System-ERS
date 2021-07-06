@@ -1,5 +1,6 @@
 package org.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.DBUtils;
@@ -7,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
 import org.models.Manager;
+import org.models.Person;
 import org.models.ReimbursementRequest;
 
 public class Service {
@@ -60,25 +62,23 @@ public class Service {
     return res;
   }
 
-  public static Employee getEmployeeRecordByEmail(String email) {
+  public static Person getPersonRecordByEmail(String email) {
     Session sess = DBUtils.getSession();
-    Transaction tx = sess.beginTransaction();
-
-    int idx = 0;
+    List<?> persons = new ArrayList<>();
     try {
-      List<?> employees = sess.createQuery("from Employee where email = ?1").setParameter(++idx, email).list();
-      tx.commit();
-      sess.close();
-      if (employees.size() > 0) {
-        return (Employee) employees.get(0);
+      int idx = 0;
+      persons.addAll(sess.createQuery("from Employee where email = ?1").setParameter(++idx, email).list());
+      if (persons.isEmpty()) {
+        idx = 0;
+        persons.addAll(sess.createQuery("from Manager where email = ?1").setParameter(++idx, email).list());
       }
+      return (Person) persons.get(0);
     } catch (Exception e) {
       // TODO: use logger
       System.out.println(e.getMessage());
+    } finally {
+      sess.close();
     }
-
-    tx.commit();
-    sess.close();
 
     return null;
   }

@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -34,6 +35,7 @@ public class Manager extends Person {
     this.id = id;
   }
 
+  @JsonIgnore
   public List<Employee> getManagedEmployees() {
     return managedEmployees;
   }

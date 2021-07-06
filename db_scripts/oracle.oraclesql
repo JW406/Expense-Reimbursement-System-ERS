@@ -11,3 +11,6 @@ SELECT DBMS_METADATA.GET_DDL('TABLE','PROJ01_MGRS') FROM DUAL;
 DROP TABLE PROJ01_EMPS;
 DROP TABLE PROJ01_MGRS;
 DROP TABLE PROJ01_REIMB_REQ;
+
+insert into proj01_mgrs(id,email,name,password) values (9999,'xx@xx.com', 'foob', 'xx');
+update PROJ01_EMPS set MANAGER_ID = 9999 where id = 1;

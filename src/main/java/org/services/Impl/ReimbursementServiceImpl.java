@@ -9,6 +9,8 @@ import org.RestModels.SubmitReimbursementUpdateRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
+import org.models.Manager;
+import org.models.Person;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
 import org.services.Service;
@@ -24,15 +26,16 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
       reimbursementRequest.setTsDate(new Date(rr.getTimestamp()));
       reimbursementRequest.setReqAmnt(rr.getRequestAmnt());
-      reimbursementRequest.setRequestedByEmployee(Service.getEmployeeRecordByEmail(email));
+      reimbursementRequest.setRequestedByEmployee((Employee) Service.getPersonRecordByEmail(email));
       reimbursementRequest.setState(ReimbursementState.active);
       System.out.println(reimbursementRequest);
       sess.save(reimbursementRequest);
 
       tx.commit();
-      sess.close();
     } catch (Exception e) {
       return false;
+    } finally {
+      sess.close();
     }
     return true;
   }
@@ -43,13 +46,14 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     List<ReimbursementRequest> res = null;
     try {
       int idx = 0;
-      Employee em = Service.getEmployeeRecordByEmail(email);
+      Person em = Service.getPersonRecordByEmail(email);
       res = sess.createQuery("from ReimbursementRequest where requestedByEmployee = ?1 and state = ?2")
           .setParameter(++idx, em).setParameter(++idx, state).list();
 
-      sess.close();
     } catch (Exception e) {
       return res;
+    } finally {
+      sess.close();
     }
     return res;
   }
@@ -67,11 +71,38 @@ public class ReimbursementServiceImpl implements ReimbursementService {
           .executeUpdate();
 
       tx.commit();
-      sess.close();
     } catch (Exception e) {
       // TODO: use logger
       System.out.println(e.getMessage());
+    } finally {
+      sess.close();
     }
     return res > 0;
+  }
+
+  @Override
+  public List<ReimbursementRequest> getManagedEmployeeRequests(String email, ReimbursementState state) {
+    Person person = Service.getPersonRecordByEmail(email);
+    Manager manager = null;
+    if (!(person instanceof Manager)) {
+      return null;
+    } else {
+      manager = (Manager) person;
+    }
+    Session sess = DBUtils.getSession();
+    List<ReimbursementRequest> res = null;
+    try {
+      int idx = 0;
+      res = sess.createQuery(
+          "from ReimbursementRequest r where r.requestedByEmployee in (select e.id from Employee e where e.manager.id = ?1)")
+          .setParameter(++idx, manager.getId()).list();
+    } catch (Exception e) {
+      // TODO: use logger
+      e.printStackTrace();
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
+    }
+    return res;
   }
 }

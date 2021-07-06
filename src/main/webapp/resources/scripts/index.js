@@ -2,6 +2,7 @@
 $(() => {
   $('.logout-btn').on('click', () => {
     window.localStorage.removeItem('username')
+    window.localStorage.removeItem('ismanager')
     fetch(window.__ctx + '/api/logout').then(() => {
       window.location.reload()
     })

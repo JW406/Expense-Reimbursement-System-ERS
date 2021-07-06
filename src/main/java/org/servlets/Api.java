@@ -20,7 +20,7 @@ import org.RestModels.Response;
 import org.RestModels.SubmitReimbursementRequest;
 import org.RestModels.SubmitReimbursementUpdateRequest;
 import org.RestModels.UpdateAccountInfo;
-import org.models.Employee;
+import org.models.Manager;
 import org.models.Person;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
@@ -49,7 +49,9 @@ public class Api extends HttpServlet {
         loginResponse.setIsSuccess(true);
         loginResponse.setMsg("Login Success");
         loginResponse.setUsername(p.getName());
+        loginResponse.setIsManager(p instanceof Manager);
         req.getSession().setAttribute("email", p.getEmail());
+        req.getSession().setAttribute("ismanager", loginResponse.getIsManager());
       } else {
         loginResponse.setIsSuccess(false);
         loginResponse.setMsg("Invalid email or password");
@@ -135,7 +137,6 @@ public class Api extends HttpServlet {
 
     if (Utils.apiEndPointMatch(req, "requestsTable")) { // requestsTable
       ReimbursementState state = ReimbursementState.valueOf(req.getParameter("state"));
-      System.out.println(req.getParameter("state"));
       List<ReimbursementRequest> response = reimServ
           .getReimbursementRequestsByLoggedInEmail((String) req.getSession().getAttribute("email"), state);
       out.print(mapper.writeValueAsString(response));
@@ -144,8 +145,17 @@ public class Api extends HttpServlet {
       req.getSession().removeAttribute("email");
 
     } else if (Utils.apiEndPointMatch(req, "get-accountinfo")) { // get-accountinfo
-      Employee employee = Service.getEmployeeRecordByEmail((String) req.getSession().getAttribute("email"));
-      out.print(mapper.writeValueAsString(employee));
+      Person person = Service.getPersonRecordByEmail((String) req.getSession().getAttribute("email"));
+      out.print(mapper.writeValueAsString(person));
+
+    } else if (Utils.apiEndPointMatch(req, "requestManagedEmployeeRequests")) { // requestManagedEmployeeRequests
+      if ((Boolean) req.getSession().getAttribute("ismanager")) {
+        ReimbursementState state = ReimbursementState.valueOf(req.getParameter("state"));
+        List<ReimbursementRequest> response = reimServ
+            .getManagedEmployeeRequests((String) req.getSession().getAttribute("email"), state);
+        out.print(mapper.writeValueAsString(response));
+      }
+
     }
     out.close();
   }

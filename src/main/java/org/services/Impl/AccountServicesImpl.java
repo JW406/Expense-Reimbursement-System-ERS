@@ -1,5 +1,6 @@
 package org.services.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.DBUtils;
@@ -38,20 +39,22 @@ public class AccountServicesImpl implements AccountServices {
   @Override
   public Person loginAccount(LoginCredentials lc) {
     Session sess = DBUtils.getSession();
-    Transaction tx = sess.beginTransaction();
-
-    int idx = 0;
+    List<?> accs = new ArrayList<>();
     try {
-      List<?> employees = sess.createQuery("from Employee where email = ?1 and password = ?2")
-          .setParameter(++idx, lc.getEmail()).setParameter(++idx, lc.getPassword()).list();
-      tx.commit();
-      sess.close();
-      if (employees.size() > 0) {
-        return (Person) employees.get(0);
+      int idx = 0;
+      accs.addAll(sess.createQuery("from Employee where email = ?1 and password = ?2")
+          .setParameter(++idx, lc.getEmail()).setParameter(++idx, lc.getPassword()).list());
+      if (accs.size() == 0) {
+        idx = 0;
+        accs.addAll(sess.createQuery("from Manager where email = ?1 and password = ?2")
+            .setParameter(++idx, lc.getEmail()).setParameter(++idx, lc.getPassword()).list());
       }
+      return (Person) accs.get(0);
     } catch (Exception e) {
       // TODO: use logger
       System.out.println(e.getMessage());
+    } finally {
+      sess.close();
     }
     return null;
   }
@@ -64,7 +67,8 @@ public class AccountServicesImpl implements AccountServices {
     int res = 0;
     try {
       int idx = 0;
-      res = sess.createQuery("update Employee e set e.name = ?1, e.phoneNumber = ?2, e.gitHubAddress = ?3 where e.email = ?4")
+      res = sess
+          .createQuery("update Employee e set e.name = ?1, e.phoneNumber = ?2, e.gitHubAddress = ?3 where e.email = ?4")
           .setParameter(++idx, lc.getFullName()).setParameter(++idx, lc.getPhoneNumber())
           .setParameter(++idx, lc.getGitHubUsername()).setParameter(++idx, email).executeUpdate();
       tx.commit();
