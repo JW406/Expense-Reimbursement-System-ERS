@@ -14,13 +14,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.Utils;
 import org.RestModels.LoginCredentials;
 import org.RestModels.LoginResponse;
+import org.RestModels.PasswordChangeRequest;
 import org.RestModels.RegisterCredentials;
 import org.RestModels.Response;
 import org.RestModels.SubmitReimbursementRequest;
 import org.RestModels.SubmitReimbursementUpdateRequest;
+import org.RestModels.UpdateAccountInfo;
+import org.models.Employee;
 import org.models.Person;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
+import org.services.Service;
 import org.services.Impl.AccountServicesImpl;
 import org.services.Impl.ReimbursementServiceImpl;
 import org.services.Interface.AccountServices;
@@ -91,6 +95,35 @@ public class Api extends HttpServlet {
       }
       out.print(mapper.writeValueAsString(response));
 
+    } else if (Utils.apiEndPointMatch(req, "info-update")) { // info-update
+      String body = Utils.readReqBody(req);
+      UpdateAccountInfo updateAccountInfo = mapper.readValue(body, UpdateAccountInfo.class);
+      Response response = new Response();
+
+      if (accServ.updateAccountInfo(updateAccountInfo, (String) req.getSession().getAttribute("email"))) {
+        response.setIsSuccess(true);
+        response.setMsg("Account information update has been successful");
+      } else {
+        response.setIsSuccess(false);
+        response.setMsg("Account information update failed");
+      }
+
+      out.print(mapper.writeValueAsString(response));
+
+    } else if (Utils.apiEndPointMatch(req, "password-change")) { // password-change
+      String body = Utils.readReqBody(req);
+      PasswordChangeRequest passwordChangeRequest = mapper.readValue(body, PasswordChangeRequest.class);
+      Response response = new Response();
+
+      if (accServ.updateAccountPassword(passwordChangeRequest, (String) req.getSession().getAttribute("email"))) {
+        response.setIsSuccess(true);
+        response.setMsg("Account password change has been successful");
+      } else {
+        response.setIsSuccess(false);
+        response.setMsg("Account password change failed");
+      }
+
+      out.print(mapper.writeValueAsString(response));
     }
 
     out.close();
@@ -99,16 +132,20 @@ public class Api extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     PrintWriter out = resp.getWriter();
     ObjectMapper mapper = new ObjectMapper();
-    if (Utils.apiEndPointMatch(req, "requestsTable")) {
+
+    if (Utils.apiEndPointMatch(req, "requestsTable")) { // requestsTable
       ReimbursementState state = ReimbursementState.valueOf(req.getParameter("state"));
       System.out.println(req.getParameter("state"));
       List<ReimbursementRequest> response = reimServ
           .getReimbursementRequestsByLoggedInEmail((String) req.getSession().getAttribute("email"), state);
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "logout")) {
+    } else if (Utils.apiEndPointMatch(req, "logout")) { // logout
       req.getSession().removeAttribute("email");
 
+    } else if (Utils.apiEndPointMatch(req, "get-accountinfo")) { // get-accountinfo
+      Employee employee = Service.getEmployeeRecordByEmail((String) req.getSession().getAttribute("email"));
+      out.print(mapper.writeValueAsString(employee));
     }
     out.close();
   }

@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.DBUtils;
 import org.RestModels.LoginCredentials;
+import org.RestModels.PasswordChangeRequest;
 import org.RestModels.RegisterCredentials;
+import org.RestModels.UpdateAccountInfo;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
@@ -52,5 +54,50 @@ public class AccountServicesImpl implements AccountServices {
       System.out.println(e.getMessage());
     }
     return null;
+  }
+
+  @Override
+  public Boolean updateAccountInfo(UpdateAccountInfo lc, String email) {
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+
+    int res = 0;
+    try {
+      int idx = 0;
+      res = sess.createQuery("update Employee e set e.name = ?1, e.phoneNumber = ?2, e.gitHubAddress = ?3 where e.email = ?4")
+          .setParameter(++idx, lc.getFullName()).setParameter(++idx, lc.getPhoneNumber())
+          .setParameter(++idx, lc.getGitHubUsername()).setParameter(++idx, email).executeUpdate();
+      tx.commit();
+      sess.close();
+
+    } catch (Exception e) {
+      // TODO: use logger
+      System.out.println(e.getMessage());
+    }
+    return res > 0;
+  }
+
+  @Override
+  public Boolean updateAccountPassword(PasswordChangeRequest pcr, String email) {
+    if (!pcr.getNewPassword().equals(pcr.getNewPassword2())) {
+      return false;
+    }
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+
+    int res = 0;
+    try {
+      int idx = 0;
+      res = sess.createQuery("update Employee e set e.password = ?1 where e.email = ?2 and e.password = ?3")
+          .setParameter(++idx, pcr.getNewPassword()).setParameter(++idx, email)
+          .setParameter(++idx, pcr.getOldPassword()).executeUpdate();
+      tx.commit();
+      sess.close();
+
+    } catch (Exception e) {
+      // TODO: use logger
+      System.out.println(e.getMessage());
+    }
+    return res > 0;
   }
 }
