@@ -15,7 +15,7 @@ public class Requests extends HttpServlet {
     if (req.getSession().getAttribute("email") == null) {
       resp.sendRedirect(req.getContextPath() + "/login");
     } else {
-      req.getRequestDispatcher("/requests.jsp").forward(req, resp);
+      req.getRequestDispatcher("/WEB-INF/requests.jsp").forward(req, resp);
     }
   }
 }

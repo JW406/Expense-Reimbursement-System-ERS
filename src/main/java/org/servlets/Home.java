@@ -15,7 +15,7 @@ public class Home extends HttpServlet {
     if (req.getSession().getAttribute("email") == null) {
       resp.sendRedirect(req.getContextPath() + "/login");
     } else {
-      req.getRequestDispatcher("/home.jsp").forward(req, resp);
+      req.getRequestDispatcher("/WEB-INF/home.jsp").forward(req, resp);
     }
   }
 }

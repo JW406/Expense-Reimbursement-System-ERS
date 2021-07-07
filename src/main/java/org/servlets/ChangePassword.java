@@ -15,7 +15,7 @@ public class ChangePassword extends HttpServlet {
     if (req.getSession().getAttribute("email") == null) {
       resp.sendRedirect(req.getContextPath() + "/login");
     } else {
-      req.getRequestDispatcher("/change_password.jsp").forward(req, resp);
+      req.getRequestDispatcher("/WEB-INF/change_password.jsp").forward(req, resp);
     }
   }
 }
