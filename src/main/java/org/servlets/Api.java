@@ -17,9 +17,9 @@ import org.RestModels.LoginResponse;
 import org.RestModels.PasswordChangeRequest;
 import org.RestModels.RegisterCredentials;
 import org.RestModels.Response;
-import org.RestModels.SubmitReimbursementRequest;
 import org.RestModels.SubmitReimbursementUpdateRequest;
 import org.RestModels.UpdateAccountInfo;
+import org.RestModels.sendReimbursementRequest;
 import org.models.Manager;
 import org.models.Person;
 import org.models.ReimbursementRequest;
@@ -73,9 +73,9 @@ public class Api extends HttpServlet {
 
     } else if (Utils.apiEndPointMatch(req, "submit-request")) { // submit-request
       String body = Utils.readReqBody(req);
-      SubmitReimbursementRequest rr = mapper.readValue(body, SubmitReimbursementRequest.class);
+      sendReimbursementRequest rr = mapper.readValue(body, sendReimbursementRequest.class);
       Response response = new Response();
-      if (reimServ.acceptReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
+      if (reimServ.employeeSendReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
         response.setIsSuccess(true);
         response.setMsg("Reimbursement request sent");
       } else {
@@ -123,6 +123,21 @@ public class Api extends HttpServlet {
       } else {
         response.setIsSuccess(false);
         response.setMsg("Account password change failed");
+      }
+
+      out.print(mapper.writeValueAsString(response));
+
+    } else if (Utils.apiEndPointMatch(req, "manager-actions")) { // manager-actions
+      String body = Utils.readReqBody(req);
+      SubmitReimbursementUpdateRequest rr = mapper.readValue(body, SubmitReimbursementUpdateRequest.class);
+      Response response = new Response();
+
+      if (reimServ.managerAcceptReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
+        response.setIsSuccess(true);
+        response.setMsg(rr.getState() + " change has been successful");
+      } else {
+        response.setIsSuccess(false);
+        response.setMsg(rr.getState() + " change failed");
       }
 
       out.print(mapper.writeValueAsString(response));

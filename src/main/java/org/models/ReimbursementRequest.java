@@ -32,6 +32,7 @@ public class ReimbursementRequest {
   @Column(name = "request_amnt")
   private Double reqAmnt;
   @OneToOne(fetch = FetchType.EAGER)
+  // TODO: change to "handled by"
   @JoinColumn(name = "approved_by", referencedColumnName = "id")
   private Manager approvedByManager;
   @Column

@@ -41,3 +41,12 @@ function dateFmt(fmt, date) {
       )
   return fmt
 }
+
+const getIsAdmin = ((isAdmin) => {
+  return function () {
+    if (isAdmin == null) {
+      isAdmin = window.localStorage.getItem('ismanager') === 'true'
+    }
+    return isAdmin
+  }
+})(null)
