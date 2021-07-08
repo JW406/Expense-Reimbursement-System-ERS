@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,6 +29,21 @@ public class Employee extends Person {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "manager_id", referencedColumnName = "id")
   private Manager manager;
+
+  @Transient
+  private Boolean isManager;
+
+  public Employee() {
+    isManager = false;
+  }
+
+  public Boolean getIsManager() {
+    return isManager;
+  }
+
+  public void setIsManager(Boolean isManager) {
+    this.isManager = isManager;
+  }
 
   public Integer getId() {
     return id;

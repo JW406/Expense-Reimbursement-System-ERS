@@ -80,7 +80,7 @@
       tbody.find('.btn-resend').unbind()
       tbody.find('.btn-comment').unbind()
       tbody.html('')
-      fetch(window.__ctx + `/api/requestManagedEmployeeRequests?state=\${state}`, {
+      fetch(window.__ctx + `/api/getManagedEmployeeRequests?state=\${state}`, {
         method: 'GET',
       }).then((resp) => resp.json()).then((data) => {
         if (data == null || !data.length) { return }
@@ -138,6 +138,10 @@
           } else if (state === 'recalled') {
             actionCell.append(
               `<button type="button" class="btn btn-primary btn-sm btn-resend" data-id="\${d['id']}">Resend</button>`
+            )
+          } else {
+            actionCell.append(
+              `<button type="button" class="btn btn-primary btn-sm" disabled data-id="\${d['id']}">Void</button>`
             )
           }
           row.append(actionCell)

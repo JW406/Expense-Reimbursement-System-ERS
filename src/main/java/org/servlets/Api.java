@@ -2,6 +2,7 @@ package org.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.Utils;
+import org.RestModels.EmployeeChangeManagerRequest;
 import org.RestModels.LoginCredentials;
 import org.RestModels.LoginResponse;
 import org.RestModels.PasswordChangeRequest;
@@ -156,6 +158,22 @@ public class Api extends HttpServlet {
       }
 
       out.print(mapper.writeValueAsString(response));
+
+    } else if (Utils.apiEndPointMatch(req, "employee-change-manager")) { // employee-change-manager
+      String body = Utils.readReqBody(req);
+      EmployeeChangeManagerRequest rr = mapper.readValue(body, EmployeeChangeManagerRequest.class);
+      Response response = new Response();
+
+      if (accServ.employeeChangeManager((String) req.getSession().getAttribute("email"), rr)) {
+        response.setIsSuccess(true);
+        response.setMsg("Manager change has been successful");
+      } else {
+        response.setIsSuccess(false);
+        response.setMsg("Manager change failed");
+      }
+
+      out.print(mapper.writeValueAsString(response));
+
     }
 
     out.close();
@@ -178,7 +196,7 @@ public class Api extends HttpServlet {
       Person person = Service.getPersonRecordByEmail((String) req.getSession().getAttribute("email"));
       out.print(mapper.writeValueAsString(person));
 
-    } else if (Utils.apiEndPointMatch(req, "requestManagedEmployeeRequests")) { // requestManagedEmployeeRequests
+    } else if (Utils.apiEndPointMatch(req, "getManagedEmployeeRequests")) { // getManagedEmployeeRequests
       if ((Boolean) req.getSession().getAttribute("ismanager")) {
         ReimbursementState state = ReimbursementState.valueOf(req.getParameter("state"));
         List<ReimbursementRequest> response = reimServ
@@ -186,7 +204,18 @@ public class Api extends HttpServlet {
         out.print(mapper.writeValueAsString(response));
       }
 
+    } else if (Utils.apiEndPointMatch(req, "getManagedEmployees")) { // getManagedEmployees
+      out.print(
+          mapper.writeValueAsString(accServ.getAllEmployeesByManager((String) req.getSession().getAttribute("email"))));
+
+    } else if (Utils.apiEndPointMatch(req, "get-all-managers")) { // get-all-managers
+      if (req.getSession().getAttribute("email") == null) {
+        out.print(mapper.writeValueAsString(new ArrayList<>()));
+      } else {
+        out.print(mapper.writeValueAsString(accServ.getAllManagers()));
+      }
     }
+
     out.close();
   }
 }

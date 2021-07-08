@@ -36,7 +36,7 @@
       }
       ).then((resp) => resp.json()).then((d) => {
         if (d['isSuccess']) {
-          alert('success')
+          alert(d['msg'])
           window.location.href = window.__ctx + '/requests'
         } else {
           $('.err-msg').text(d.msg)
