@@ -46,7 +46,9 @@
         }
         ).then((resp) => resp.json()).then((d) => {
           if (d['isSuccess']) {
-            alert('success')
+            ev.target['passwordInput'].value = ''
+            ev.target['repeatPasswordInput'].value = ''
+            alert(d['msg'])
           } else {
             $('.err-msg').text(d.msg)
           }

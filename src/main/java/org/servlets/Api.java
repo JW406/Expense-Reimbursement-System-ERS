@@ -141,6 +141,21 @@ public class Api extends HttpServlet {
       }
 
       out.print(mapper.writeValueAsString(response));
+
+    } else if (Utils.apiEndPointMatch(req, "manager-update-request-comment")) { // manager-update-request-comment
+      String body = Utils.readReqBody(req);
+      SubmitReimbursementUpdateRequest rr = mapper.readValue(body, SubmitReimbursementUpdateRequest.class);
+      Response response = new Response();
+
+      if (reimServ.managerReimbursementRequestComment(rr, (String) req.getSession().getAttribute("email"))) {
+        response.setIsSuccess(true);
+        response.setMsg("Comment update has been successful");
+      } else {
+        response.setIsSuccess(false);
+        response.setMsg("Comment update failed");
+      }
+
+      out.print(mapper.writeValueAsString(response));
     }
 
     out.close();
