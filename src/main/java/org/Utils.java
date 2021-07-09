@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * HttpServletRequest object utility class
+ */
 final public class Utils {
   public static Boolean apiEndPointMatch(HttpServletRequest req, String seg) {
     String[] _endPoint = req.getRequestURI().split("api/");

@@ -26,7 +26,6 @@ import org.models.Manager;
 import org.models.Person;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
-import org.services.Service;
 import org.services.Impl.AccountServicesImpl;
 import org.services.Impl.ReimbursementServiceImpl;
 import org.services.Interface.AccountServices;
@@ -193,7 +192,7 @@ public class Api extends HttpServlet {
       req.getSession().removeAttribute("email");
 
     } else if (Utils.apiEndPointMatch(req, "get-accountinfo")) { // get-accountinfo
-      Person person = Service.getPersonRecordByEmail((String) req.getSession().getAttribute("email"));
+      Person person = accServ.getPersonRecordByEmail((String) req.getSession().getAttribute("email"));
       out.print(mapper.writeValueAsString(person));
 
     } else if (Utils.apiEndPointMatch(req, "getManagedEmployeeRequests")) { // getManagedEmployeeRequests

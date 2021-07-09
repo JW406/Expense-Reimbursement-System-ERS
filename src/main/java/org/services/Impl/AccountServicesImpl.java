@@ -14,13 +14,33 @@ import org.hibernate.Transaction;
 import org.models.Employee;
 import org.models.Manager;
 import org.models.Person;
-import org.services.Service;
 import org.services.Interface.AccountServices;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AccountServicesImpl implements AccountServices {
+  @Override
+  public Person getPersonRecordByEmail(String email) {
+    Session sess = DBUtils.getSession();
+    List<?> persons = new ArrayList<>();
+    try {
+      int idx = 0;
+      persons.addAll(sess.createQuery("from Employee where email = ?1").setParameter(++idx, email).list());
+      if (persons.isEmpty()) {
+        idx = 0;
+        persons.addAll(sess.createQuery("from Manager where email = ?1").setParameter(++idx, email).list());
+      }
+      return (Person) persons.get(0);
+    } catch (Exception e) {
+      log.warn(e.getMessage());
+    } finally {
+      sess.close();
+    }
+
+    return null;
+  }
+
   @Override
   public Boolean registerAccount(RegisterCredentials rc) {
     Session sess = DBUtils.getSession();
@@ -73,7 +93,7 @@ public class AccountServicesImpl implements AccountServices {
   public Boolean updateAccountInfo(UpdateAccountInfo lc, String email) {
     Session sess = DBUtils.getSession();
     Transaction tx = sess.beginTransaction();
-    Person person = Service.getPersonRecordByEmail(email);
+    Person person = getPersonRecordByEmail(email);
 
     int res = 0;
     try {
