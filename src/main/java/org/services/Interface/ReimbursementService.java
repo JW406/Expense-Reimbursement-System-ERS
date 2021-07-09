@@ -3,7 +3,7 @@ package org.services.Interface;
 import java.util.List;
 
 import org.RestModels.SubmitReimbursementUpdateRequest;
-import org.RestModels.sendReimbursementRequest;
+import org.RestModels.SendReimbursementRequest;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
 
@@ -16,7 +16,7 @@ public interface ReimbursementService {
    * @param email String
    * @return Boolean
    */
-  Boolean employeeSendReimbursementRequest(sendReimbursementRequest rr, String email);
+  Integer employeeSendReimbursementRequest(SendReimbursementRequest rr, String email);
 
   /**
    * @param rr SubmitReimbursementUpdateRequest
@@ -52,4 +52,10 @@ public interface ReimbursementService {
    * @return Boolean
    */
   Boolean managerReimbursementRequestComment(SubmitReimbursementUpdateRequest rr, String email);
+
+  /**
+   * @param id
+   * @return Boolean
+   */
+  Boolean deleteAnRequest(Integer id);
 }

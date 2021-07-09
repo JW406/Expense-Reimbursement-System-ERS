@@ -1,6 +1,6 @@
 package org.RestModels;
 
-public class sendReimbursementRequest {
+public class SendReimbursementRequest {
   private Double requestAmnt;
   private Long timestamp;
 

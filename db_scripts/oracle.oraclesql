@@ -15,3 +15,7 @@ DROP TABLE PROJ01_REIMB_REQ;
 insert into proj01_mgrs(id,email,name,password) values (9999,'xx@xx.com', 'foob', 'xx');
 insert into proj01_mgrs(id,email,name,password) values (9998,'dd@dd.com', 'noob', 'dd');
 update PROJ01_EMPS set MANAGER_ID = 9999 where id = 1;
+
+delete from PROJ01_REIMB_REQ where REQUEST_AMNT = 1000;
+delete from PROJ01_MGRS where email = 'testMan@qq.com';
+delete from PROJ01_EMPS where email = 'testEm@qq.com';

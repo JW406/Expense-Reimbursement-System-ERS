@@ -58,6 +58,7 @@ public class AccountServicesImpl implements AccountServices {
       person.setName(rc.getName());
       sess.save(person);
       tx.commit();
+      log.info("{}({}) just registered an account", person.getName(), person.getEmail());
       return true;
     } catch (Exception e) {
       log.warn(e.getMessage());
@@ -80,7 +81,9 @@ public class AccountServicesImpl implements AccountServices {
         accs.addAll(sess.createQuery("from Manager where email = ?1 and password = ?2")
             .setParameter(++idx, lc.getEmail()).setParameter(++idx, lc.getPassword()).list());
       }
-      return (Person) accs.get(0);
+      Person res = (Person) accs.get(0);
+      log.info("{}({}) logged in to the system", res.getName(), res.getEmail());
+      return res;
     } catch (Exception e) {
       log.warn(e.getMessage());
     } finally {
@@ -114,6 +117,7 @@ public class AccountServicesImpl implements AccountServices {
     } finally {
       sess.close();
     }
+    log.info("{}({}) just updated their information", person.getName(), person.getEmail());
     return res > 0;
   }
 
@@ -137,6 +141,7 @@ public class AccountServicesImpl implements AccountServices {
     } catch (Exception e) {
       log.warn(e.getMessage());
     }
+    log.info("{} just updated their password", email);
     return res > 0;
   }
 
@@ -195,6 +200,34 @@ public class AccountServicesImpl implements AccountServices {
     } finally {
       sess.close();
     }
+    log.info("{} just changed their manager", email);
     return res > 0;
+  }
+
+  @Override
+  public Boolean deleteAnAccount(String email) {
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+
+    try {
+      int idx = 0, res = 0;
+      res = sess.createQuery("delete Employee e where e.email = ?1").setParameter(++idx, email).executeUpdate();
+      if (res == 0) {
+        idx = 0;
+        sess.createQuery("delete Manager m where m.email = ?1").setParameter(++idx, email).executeUpdate();
+      }
+      tx.commit();
+      if (res > 0) {
+        log.info("Employee/Manager with email {} was just deleted", email);
+        return true;
+      }
+
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
+    }
+
+    return false;
   }
 }
