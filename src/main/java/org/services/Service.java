@@ -11,32 +11,10 @@ import org.models.Manager;
 import org.models.Person;
 import org.models.ReimbursementRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Service {
-  public static void registerEmployee() {
-    Session sess = DBUtils.getSession();
-    Transaction tx = sess.beginTransaction();
-    Employee employee = new Employee();
-    Employee employee2 = new Employee();
-    Manager manager = new Manager();
-    manager.setName("Lisa");
-    employee.setId(1);
-    employee.setEmail("foo@q.com");
-    employee.setPassword("foo@q.com");
-    employee.setName("Foob");
-    employee.setManager(manager);
-
-    employee2.setId(1);
-    employee2.setEmail("bar@q.com");
-    employee2.setPassword("bar@q.com");
-    employee2.setName("Lily");
-    employee2.setManager(manager);
-    sess.save(manager);
-    sess.save(employee);
-    sess.save(employee2);
-    tx.commit();
-    sess.close();
-  }
-
   public static void employeeFileReimRequest(Employee e, Double amnt) {
     Session sess = DBUtils.getSession();
     Transaction tx = sess.beginTransaction();
@@ -74,8 +52,7 @@ public class Service {
       }
       return (Person) persons.get(0);
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
