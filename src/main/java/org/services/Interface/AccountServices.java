@@ -2,11 +2,11 @@ package org.services.Interface;
 
 import java.util.List;
 
-import org.RestModels.EmployeeChangeManagerRequest;
-import org.RestModels.LoginCredentials;
-import org.RestModels.PasswordChangeRequest;
-import org.RestModels.RegisterCredentials;
-import org.RestModels.UpdateAccountInfo;
+import org.RestModels.Request.EmployeeChangeManagerRequest;
+import org.RestModels.Request.LoginCredentialsRequest;
+import org.RestModels.Request.PasswordChangeRequest;
+import org.RestModels.Request.RegisterCredentialsRequest;
+import org.RestModels.Request.UpdateAccountInfoRequest;
 import org.models.Employee;
 import org.models.Manager;
 import org.models.Person;
@@ -26,20 +26,20 @@ public interface AccountServices {
    * @param rc
    * @return Boolean
    */
-  Boolean registerAccount(RegisterCredentials rc);
+  Boolean registerAccount(RegisterCredentialsRequest rc);
 
   /**
    * @param lc
    * @return Person
    */
-  Person loginAccount(LoginCredentials lc);
+  Person loginAccount(LoginCredentialsRequest lc);
 
   /**
    * @param lc
    * @param email
    * @return Boolean
    */
-  Boolean updateAccountInfo(UpdateAccountInfo lc, String email);
+  Boolean updateAccountInfo(UpdateAccountInfoRequest lc, String email);
 
   /**
    * @param pcr

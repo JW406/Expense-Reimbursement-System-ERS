@@ -3,9 +3,9 @@ package org.services.Impl;
 import java.util.Date;
 import java.util.List;
 
-import org.DBUtils;
-import org.RestModels.SendReimbursementRequest;
-import org.RestModels.SubmitReimbursementUpdateRequest;
+import org.DBConnUtil;
+import org.RestModels.Request.SendReimbursementRequest;
+import org.RestModels.Request.SubmitReimbursementUpdateRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
@@ -24,7 +24,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
   @Override
   public Integer employeeSendReimbursementRequest(SendReimbursementRequest rr, String email) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     try {
@@ -33,7 +33,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       reimbursementRequest.setReqAmnt(rr.getRequestAmnt());
       reimbursementRequest.setRequestedByEmployee((Employee) accSrv.getPersonRecordByEmail(email));
       reimbursementRequest.setState(ReimbursementState.active);
-      Integer res = (Integer)sess.save(reimbursementRequest);
+      Integer res = (Integer) sess.save(reimbursementRequest);
 
       tx.commit();
       log.info("{} just send an reimbursement request with amount {}", email, rr.getRequestAmnt());
@@ -48,7 +48,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
   @Override
   public List<ReimbursementRequest> getReimbursementRequestsByLoggedInEmail(String email, ReimbursementState state) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     List<ReimbursementRequest> res = null;
     try {
       int idx = 0;
@@ -66,7 +66,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
   @Override
   public Boolean updateReimbursementRequest(SubmitReimbursementUpdateRequest rr, String email) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
     int res = 0;
     try {
@@ -95,7 +95,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     } else {
       manager = (Manager) person;
     }
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     List<ReimbursementRequest> res = null;
     try {
       int idx = 0;
@@ -112,13 +112,12 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
   @Override
   public Boolean managerAcceptReimbursementRequest(SubmitReimbursementUpdateRequest rr, String email) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
     try {
       int idx = 0;
-      // TODO: use "handled by"
       int res = sess.createQuery(
-          "update ReimbursementRequest r set r.state = ?1, r.approvedByManager = (select m.id from Manager m where m.email = ?2) where r.id = ?3")
+          "update ReimbursementRequest r set r.state = ?1, r.handledByManager = (select m.id from Manager m where m.email = ?2) where r.id = ?3")
           .setParameter(++idx, rr.getState()).setParameter(++idx, email).setParameter(++idx, rr.getId())
           .executeUpdate();
       tx.commit();
@@ -135,7 +134,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
   @Override
   public Boolean managerReimbursementRequestComment(SubmitReimbursementUpdateRequest rr, String email) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     try {
@@ -157,13 +156,13 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
   @Override
   public Boolean deleteAnRequest(Integer id) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     try {
       int idx = 0;
-      int res = sess.createQuery("delete ReimbursementRequest r where r.id = ?1")
-          .setParameter(++idx, id).executeUpdate();
+      int res = sess.createQuery("delete ReimbursementRequest r where r.id = ?1").setParameter(++idx, id)
+          .executeUpdate();
       tx.commit();
       log.info("Reimbursement request with id {} was just deleted", id);
       return res > 0;

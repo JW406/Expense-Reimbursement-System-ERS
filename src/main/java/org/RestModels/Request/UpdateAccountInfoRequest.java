@@ -1,6 +1,6 @@
-package org.RestModels;
+package org.RestModels.Request;
 
-public class UpdateAccountInfo {
+public class UpdateAccountInfoRequest {
   private String fullName;
   private String phoneNumber;
   private String gitHubUsername;

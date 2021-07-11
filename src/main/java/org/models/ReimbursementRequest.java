@@ -32,9 +32,8 @@ public class ReimbursementRequest {
   @Column(name = "request_amnt")
   private Double reqAmnt;
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-  // TODO: change to "handled by"
-  @JoinColumn(name = "approved_by", referencedColumnName = "id")
-  private Manager approvedByManager;
+  @JoinColumn(name = "handled_by", referencedColumnName = "id")
+  private Manager handledByManager;
   @Column
   @Temporal(TemporalType.TIMESTAMP)
   private Date tsDate;
@@ -92,17 +91,18 @@ public class ReimbursementRequest {
     this.reqAmnt = reqAmnt;
   }
 
-  public Manager getApprovedByManager() {
-    return approvedByManager;
+  public Manager getHandledByManager() {
+    return handledByManager;
   }
 
-  public void setApprovedByManager(Manager approvedByManager) {
-    this.approvedByManager = approvedByManager;
+  public void setHandledByManager(Manager handledByManager) {
+    this.handledByManager = handledByManager;
   }
 
   @Override
   public String toString() {
-    return "ReimbursementRequest [approvedByManager=" + approvedByManager + ", id=" + id + ", reqAmnt=" + reqAmnt
-        + ", requestedbyEmployee=" + requestedByEmployee + ", tsDate=" + tsDate + "]";
+    return "ReimbursementRequest [handledByManager=" + handledByManager + ", id=" + id + ", mgrComment=" + mgrComment
+        + ", reqAmnt=" + reqAmnt + ", requestedByEmployee=" + requestedByEmployee + ", state=" + state + ", tsDate="
+        + tsDate + "]";
   }
 }

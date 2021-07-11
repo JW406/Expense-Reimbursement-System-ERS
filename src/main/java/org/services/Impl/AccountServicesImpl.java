@@ -3,12 +3,12 @@ package org.services.Impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.DBUtils;
-import org.RestModels.EmployeeChangeManagerRequest;
-import org.RestModels.LoginCredentials;
-import org.RestModels.PasswordChangeRequest;
-import org.RestModels.RegisterCredentials;
-import org.RestModels.UpdateAccountInfo;
+import org.DBConnUtil;
+import org.RestModels.Request.EmployeeChangeManagerRequest;
+import org.RestModels.Request.LoginCredentialsRequest;
+import org.RestModels.Request.PasswordChangeRequest;
+import org.RestModels.Request.RegisterCredentialsRequest;
+import org.RestModels.Request.UpdateAccountInfoRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountServicesImpl implements AccountServices {
   @Override
   public Person getPersonRecordByEmail(String email) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     List<?> persons = new ArrayList<>();
     try {
       int idx = 0;
@@ -42,8 +42,8 @@ public class AccountServicesImpl implements AccountServices {
   }
 
   @Override
-  public Boolean registerAccount(RegisterCredentials rc) {
-    Session sess = DBUtils.getSession();
+  public Boolean registerAccount(RegisterCredentialsRequest rc) {
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     Person person = null;
@@ -69,8 +69,8 @@ public class AccountServicesImpl implements AccountServices {
   }
 
   @Override
-  public Person loginAccount(LoginCredentials lc) {
-    Session sess = DBUtils.getSession();
+  public Person loginAccount(LoginCredentialsRequest lc) {
+    Session sess = DBConnUtil.getSession();
     List<?> accs = new ArrayList<>();
     try {
       int idx = 0;
@@ -93,8 +93,8 @@ public class AccountServicesImpl implements AccountServices {
   }
 
   @Override
-  public Boolean updateAccountInfo(UpdateAccountInfo lc, String email) {
-    Session sess = DBUtils.getSession();
+  public Boolean updateAccountInfo(UpdateAccountInfoRequest lc, String email) {
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
     Person person = getPersonRecordByEmail(email);
 
@@ -126,7 +126,7 @@ public class AccountServicesImpl implements AccountServices {
     if (!pcr.getNewPassword().equals(pcr.getNewPassword2())) {
       return false;
     }
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     int res = 0;
@@ -147,7 +147,7 @@ public class AccountServicesImpl implements AccountServices {
 
   @Override
   public List<Employee> getAllEmployeesByManager(String email) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
 
     List<Employee> res = new ArrayList<>();
 
@@ -166,7 +166,7 @@ public class AccountServicesImpl implements AccountServices {
 
   @Override
   public List<Manager> getAllManagers() {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
 
     List<Manager> res = new ArrayList<>();
 
@@ -183,7 +183,7 @@ public class AccountServicesImpl implements AccountServices {
 
   @Override
   public Boolean employeeChangeManager(String email, EmployeeChangeManagerRequest rr) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     int res = 0;
@@ -206,7 +206,7 @@ public class AccountServicesImpl implements AccountServices {
 
   @Override
   public Boolean deleteAnAccount(String email) {
-    Session sess = DBUtils.getSession();
+    Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     try {

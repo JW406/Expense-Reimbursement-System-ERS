@@ -1,6 +1,6 @@
-package org.RestModels;
+package org.RestModels.Response;
 
-public class LoginResponse extends Response {
+public class LoginResponse extends SimpleResponse {
   private String username;
   private Boolean isManager;
 

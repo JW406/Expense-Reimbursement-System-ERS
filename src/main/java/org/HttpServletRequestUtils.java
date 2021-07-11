@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * HttpServletRequest object utility class
  */
-final public class Utils {
+final public class HttpServletRequestUtils {
   public static Boolean apiEndPointMatch(HttpServletRequest req, String seg) {
     String[] _endPoint = req.getRequestURI().split("api/");
     String endPoint = _endPoint[1];
