@@ -29,7 +29,7 @@
             </tr>
           `)
         }
-        $('.table').dataTable();
+        $('.table').dataTable()
       })
     })
   </script>
