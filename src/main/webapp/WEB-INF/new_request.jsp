@@ -10,6 +10,10 @@
           <span style="height:38px;line-height:38px;margin-right:5px;">$</span>
           <input type="text" class="form-control" id="request-amnt" autofocus>
         </div>
+        <label for="request-reason">Reason</label>
+        <div>
+          <textarea id="request-reason" style="width:100%;height:200px;"></textarea>
+        </div>
       </div>
     </div>
     <div class="err-msg"> </div>
@@ -21,6 +25,7 @@
     ev.preventDefault()
     $('.err-msg').text('')
     const requestAmnt = ev.target['request-amnt'].value
+    const requestReason = ev.target['request-reason'].value
     let decimalSignIdx = -1
     if (!$.isNumeric(requestAmnt)) {
       $('.err-msg').text('Numbers only')
@@ -32,7 +37,7 @@
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
-        body: JSON.stringify({ requestAmnt, timestamp: new Date().getTime() }),
+        body: JSON.stringify({ requestAmnt, requestReason, timestamp: new Date().getTime() }),
       }
       ).then((resp) => resp.json()).then((d) => {
         if (d['isSuccess']) {

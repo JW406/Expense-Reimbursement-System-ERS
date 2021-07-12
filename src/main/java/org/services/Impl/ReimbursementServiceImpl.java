@@ -31,6 +31,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
       reimbursementRequest.setTsDate(new Date(rr.getTimestamp()));
       reimbursementRequest.setReqAmnt(rr.getRequestAmnt());
+      reimbursementRequest.setRequestReason(rr.getRequestReason());
       reimbursementRequest.setRequestedByEmployee((Employee) accSrv.getPersonRecordByEmail(email));
       reimbursementRequest.setState(ReimbursementState.active);
       Integer res = (Integer) sess.save(reimbursementRequest);

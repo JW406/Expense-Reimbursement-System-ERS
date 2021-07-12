@@ -2,7 +2,16 @@ package org.RestModels.Request;
 
 public class SendReimbursementRequest {
   private Double requestAmnt;
+  private String requestReason;
   private Long timestamp;
+
+  public String getRequestReason() {
+    return requestReason;
+  }
+
+  public void setRequestReason(String requestReason) {
+    this.requestReason = requestReason;
+  }
 
   public Double getRequestAmnt() {
     return requestAmnt;
