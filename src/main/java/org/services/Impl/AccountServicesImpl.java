@@ -117,8 +117,11 @@ public class AccountServicesImpl implements AccountServices {
     } finally {
       sess.close();
     }
-    log.info("{}({}) just updated their information", person.getName(), person.getEmail());
-    return res > 0;
+    if (res > 0) {
+      log.info("{}({}) just updated their information", person.getName(), person.getEmail());
+      return true;
+    }
+    return false;
   }
 
   @Override
@@ -126,13 +129,20 @@ public class AccountServicesImpl implements AccountServices {
     if (!pcr.getNewPassword().equals(pcr.getNewPassword2())) {
       return false;
     }
+    String HQL = "update ";
+    Person person = getPersonRecordByEmail(email);
+    if (person instanceof Manager) {
+      HQL += "Manager";
+    } else {
+      HQL += "Employee";
+    }
     Session sess = DBConnUtil.getSession();
     Transaction tx = sess.beginTransaction();
 
     int res = 0;
     try {
       int idx = 0;
-      res = sess.createQuery("update Employee e set e.password = ?1 where e.email = ?2 and e.password = ?3")
+      res = sess.createQuery(HQL + " e set e.password = ?1 where e.email = ?2 and e.password = ?3")
           .setParameter(++idx, pcr.getNewPassword()).setParameter(++idx, email)
           .setParameter(++idx, pcr.getOldPassword()).executeUpdate();
       tx.commit();
@@ -141,8 +151,11 @@ public class AccountServicesImpl implements AccountServices {
     } catch (Exception e) {
       log.warn(e.getMessage());
     }
-    log.info("{} just updated their password", email);
-    return res > 0;
+    if (res > 0) {
+      log.info("{} just updated their password", email);
+      return true;
+    }
+    return false;
   }
 
   @Override
@@ -200,8 +213,11 @@ public class AccountServicesImpl implements AccountServices {
     } finally {
       sess.close();
     }
-    log.info("{} just changed their manager", email);
-    return res > 0;
+    if (res > 0) {
+      log.info("{} just changed their manager", email);
+      return true;
+    }
+    return false;
   }
 
   @Override

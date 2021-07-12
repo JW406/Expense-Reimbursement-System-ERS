@@ -83,18 +83,21 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     } finally {
       sess.close();
     }
-    log.info("{} updated one of their reimbursement request", email);
-    return res > 0;
+    if (res > 0) {
+      log.info("{} updated one of their reimbursement request", email);
+      return true;
+    }
+    return false;
   }
 
   @Override
   public List<ReimbursementRequest> getManagedEmployeeRequests(String email, ReimbursementState state) {
     Person person = accSrv.getPersonRecordByEmail(email);
     Manager manager = null;
-    if (!(person instanceof Manager)) {
-      return null;
-    } else {
+    if (person instanceof Manager) {
       manager = (Manager) person;
+    } else {
+      return null;
     }
     Session sess = DBConnUtil.getSession();
     List<ReimbursementRequest> res = null;

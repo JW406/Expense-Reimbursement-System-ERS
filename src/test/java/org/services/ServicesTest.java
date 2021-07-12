@@ -18,6 +18,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.models.Employee;
+import org.models.Person;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
 import org.services.Impl.AccountServicesImpl;
@@ -97,7 +98,8 @@ public class ServicesTest {
     submitReimbursementUpdateRequest3.setState(ReimbursementState.recalled);
     reimSrv.updateReimbursementRequest(submitReimbursementUpdateRequest3, employeeEmail);
 
-    List<ReimbursementRequest> reimbursementRequestsByLoggedInUser = reimSrv.getReimbursementRequestsByLoggedInEmail(employeeEmail, ReimbursementState.recalled);
+    List<ReimbursementRequest> reimbursementRequestsByLoggedInUser = reimSrv
+        .getReimbursementRequestsByLoggedInEmail(employeeEmail, ReimbursementState.recalled);
     assertTrue(reimbursementRequestsByLoggedInUser.size() == 1);
     assertTrue(reimbursementRequestsByLoggedInUser.get(0).getState().equals(ReimbursementState.recalled));
 
@@ -124,8 +126,8 @@ public class ServicesTest {
     passwordChangeRequest.setOldPassword("123");
     passwordChangeRequest.setNewPassword("456");
     passwordChangeRequest.setNewPassword2("456");
-    accSrv.updateAccountPassword(passwordChangeRequest, employeeEmail);
-    Employee em = (Employee) accSrv.getPersonRecordByEmail(employeeEmail);
+    accSrv.updateAccountPassword(passwordChangeRequest, managerEmail);
+    Person em = accSrv.getPersonRecordByEmail(managerEmail);
     assertEquals(em.getPassword(), passwordChangeRequest.getNewPassword2());
   }
 
