@@ -60,28 +60,27 @@
         $('#phone-number').attr('value', d['phoneNumber']).addClass('is-valid')
         $('#github-username').attr('value', d['gitHubAddress']).addClass('is-valid')
       })
-    })
+      $('#edit-userinfo').submit((e) => {
+        e.preventDefault()
+        const fullName = e.target['full-name'].value
+        const phoneNumber = e.target['phone-number'].value
+        const gitHubUsername = e.target['github-username'].value
+        fetch(window.__ctx + '/api/info-update', {
+          method: 'POST',
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify({ fullName, phoneNumber, gitHubUsername }),
+        }).then((d) => d.json()).then((d) => {
+          if (d['isSuccess']) {
+            window.localStorage.setItem('username', fullName)
+            modalShow({ body: d['msg'], onclose: () => window.location.reload() })
+          }
+        })
 
-    $('#edit-userinfo').submit((e) => {
-      e.preventDefault()
-      const fullName = e.target['full-name'].value
-      const phoneNumber = e.target['phone-number'].value
-      const gitHubUsername = e.target['github-username'].value
-      fetch(window.__ctx + '/api/info-update', {
-        method: 'POST',
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-        body: JSON.stringify({ fullName, phoneNumber, gitHubUsername }),
-      }).then((d) => d.json()).then((d) => {
-        if (d['isSuccess']) {
-          window.localStorage.setItem('username', fullName)
-          window.location.reload()
-          alert('success')
-        }
       })
-
     })
+
   </script>
 
   <jsp:include page="footer.jsp" />

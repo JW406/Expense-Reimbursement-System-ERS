@@ -77,7 +77,7 @@
       }).then((d) => d.json()).then((d) => {
         $this.find('input').val('')
         $this.find('input').removeClass('is-invalid').removeClass('is-valid')
-        alert(d['msg'])
+        modalShow({ body: d['msg'] })
       })
 
     })

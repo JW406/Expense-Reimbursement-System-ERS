@@ -66,8 +66,7 @@
               body: JSON.stringify({ managerEmail }),
             }).then((d) => d.json()).then((d) => {
               if (d['isSuccess']) {
-                alert(d['msg'])
-                window.location.reload()
+                modalShow({ body: d['msg'], onclose: () => window.location.reload() })
               }
             })
           })
