@@ -6,3 +6,24 @@ body {
   width: 60vw;
   margin: 0 auto;
 }
+
+.w-33 {
+  width: 33%;
+}
+
+.px-10 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media screen and (min-width: 992px) {
+  .px-10 {
+    padding-left: 7rem;
+    padding-right: 7rem;
+  }
+}
+
+.dropdown-menu {
+  left: unset;
+  right: 0;
+}
