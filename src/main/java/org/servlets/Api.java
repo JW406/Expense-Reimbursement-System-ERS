@@ -54,8 +54,14 @@ public class Api extends HttpServlet {
       String userjson = mapper.writeValueAsString(user);
       out.println(userjson);
       out.println(body);
-    } else if (Utils.apiEndPointMatch(req, "requestsTable")) {
+    }
+    out.close();
+  }
 
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    PrintWriter out = resp.getWriter();
+    if (Utils.apiEndPointMatch(req, "requestsTable")) {
+      out.print("{\"foo\":\"bar\"}");
     }
     out.close();
   }
