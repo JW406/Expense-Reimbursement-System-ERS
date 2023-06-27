@@ -15,6 +15,7 @@
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
         <label class="form-check-label" for="exampleCheck1">Remember Me</label>
       </div>
+      <div class="err-msg"> </div>
       <div class="w-100 d-flex justify-content-around">
         <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
         <button class="btn btn-primary" id="registerBtn">Register</button>
@@ -34,6 +35,12 @@
         body: JSON.stringify({ email, password }),
       }
       ).then((resp) => resp.json()).then((d) => {
+        if (d['isSuccess']) {
+          window.localStorage.setItem('username', d['username'])
+          window.location.href = window.__ctx + '/home';
+        } else {
+          $('.err-msg').text(d.msg)
+        }
         console.log(d)
       })
     })

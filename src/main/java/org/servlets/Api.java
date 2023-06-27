@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,8 @@ public class Api extends HttpServlet {
       if (loginCredentials.getEmail().equals("a@a.com") && loginCredentials.getPassword().equals("a")) {
         loginResponse.setIsSuccess(true);
         loginResponse.setMsg("Login Success");
+        loginResponse.setUsername("Jayden");
+        req.getSession().setAttribute("email", loginCredentials.getEmail());
       } else {
         loginResponse.setIsSuccess(false);
         loginResponse.setMsg("Invalid email or password");

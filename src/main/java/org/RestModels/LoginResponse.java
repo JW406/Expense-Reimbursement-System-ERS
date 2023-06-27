@@ -2,6 +2,8 @@ package org.RestModels;
 
 public class LoginResponse {
   private String msg;
+  private String username;
+
   private Boolean isSuccess;
 
   public String getMsg() {
@@ -18,6 +20,14 @@ public class LoginResponse {
 
   public void setIsSuccess(Boolean isSuccess) {
     this.isSuccess = isSuccess;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   @Override
