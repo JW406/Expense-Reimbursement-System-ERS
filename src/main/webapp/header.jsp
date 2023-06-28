@@ -10,9 +10,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="resources/libraries/js/jquery-3.5.1.slim.min.js"></script>
-  <link rel="stylesheet" href="resources/libraries/css/bootstrap.min.css">
-  <link rel="stylesheet" href="resources/css/custom.css">
+  <script src="<%=request.getContextPath()%>/resources/libraries/js/jquery-3.5.1.slim.min.js"></script>
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/libraries/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/custom.css">
   <script>window.__ctx = '<%=request.getContextPath()%>'</script>
   <script>
     $(() => {
