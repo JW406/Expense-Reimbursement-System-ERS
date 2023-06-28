@@ -53,9 +53,10 @@ function populateTable() {
 
 $(() => {
   populateTable()
-  fetch(window.__ctx + '/api/requeststable')
-    .then((resp) => resp.json())
-    .then((d) => {
-      console.log(d)
+  $('.logout-btn').on('click', () => {
+    window.localStorage.removeItem('username')
+    fetch(window.__ctx + '/api/logout').then(() => {
+      window.location.reload()
     })
+  })
 })
