@@ -7,19 +7,17 @@ CREATE TABLE proj01_emps (
   manager NUMBER,
   email VARCHAR2(50),
   uname VARCHAR2(50),
-  passwd VARCHAR2(50)
+  passwd VARCHAR2(50),
+  CONSTRAINT pk_emps_id PRIMARY KEY(id),
+  CONSTRAINT fk_emps_id FOREIGN KEY(manager) REFERENCES proj01_emps(id)
 );
-ALTER TABLE proj01_emps
-ADD CONSTRAINT proj01_emps_id_pk PRIMARY KEY(id);
 
 CREATE TABLE proj01_reimb_req (
   id NUMBER,
   emp_id NUMBER,
-  req_amnt NUMBER
+  req_amnt NUMBER,
+  approved_by NUMBER,
+  CONSTRAINT pk_reimb_req_id PRIMARY KEY(id),
+  CONSTRAINT fk_reimb_req_empId_fk FOREIGN KEY(emp_id) REFERENCES proj01_emps(id) ON DELETE CASCADE,
+  CONSTRAINT fk_reimb_req_approved_by FOREIGN KEY(approved_by) REFERENCES proj01_emps(id)
 );
-ALTER TABLE proj01_reimb_req
-ADD CONSTRAINT proj01_reimb_req_id_pk PRIMARY KEY(id);
-
-ALTER TABLE proj01_reimb_req
-ADD CONSTRAINT proj01_reimb_req_empId_fk FOREIGN KEY(emp_id)
-REFERENCES proj01_emps(id) ON DELETE CASCADE;
