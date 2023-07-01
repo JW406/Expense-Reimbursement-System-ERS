@@ -6,7 +6,6 @@ import java.net.URL;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 public class DBUtils {
@@ -23,16 +22,11 @@ public class DBUtils {
       e.printStackTrace();
       throw new HibernateException("File not found");
     }
-    final Configuration config = new Configuration().configure(hibernateCfg);
-
-    // read in RDS credentials from the environment variables.
+    Configuration config = new Configuration().configure(hibernateCfg);
     config.setProperty("hibernate.connection.url", System.getenv("rds_url"));
     config.setProperty("hibernate.connection.username", System.getenv("rds_username"));
     config.setProperty("hibernate.connection.password", System.getenv("rds_pwd"));
-
-    final StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-        .applySettings(config.getProperties());
-    sessionFactory = config.buildSessionFactory(builder.build());
+    sessionFactory = config.buildSessionFactory();
   }
 
   public static Session getSession() {
