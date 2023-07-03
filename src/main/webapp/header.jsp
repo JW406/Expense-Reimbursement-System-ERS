@@ -53,14 +53,14 @@
 
     <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
       <ul class="navbar-nav">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="<%=request.getContextPath()%>/home">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<%=request.getContextPath()%>/requests">View Requests</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">View All Employees</a>
+          <a class="nav-link">View All Employees</a>
         </li>
       </ul>
       <ul class="navbar-nav">
