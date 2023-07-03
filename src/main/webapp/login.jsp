@@ -18,15 +18,16 @@
       <div class="err-msg"> </div>
       <div class="w-100 d-flex justify-content-around">
         <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
-        <button class="btn btn-primary" id="registerBtn">Register</button>
+        <a href="<%=request.getContextPath()%>/register" class="btn btn-primary" id="registerBtn">Register</a>
       </div>
     </form>
   </div>
   <script>
     document.getElementById('login').addEventListener('submit', (ev) => {
       ev.preventDefault()
-      const email = $('#emailInput').val()
-      const password = $('#passwordInput').val()
+      $('.err-msg').text('')
+      const email = ev.target['emailInput'].value
+      const password = ev.target['passwordInput'].value
       fetch(window.__ctx + '/api/login', {
         method: 'POST',
         headers: {

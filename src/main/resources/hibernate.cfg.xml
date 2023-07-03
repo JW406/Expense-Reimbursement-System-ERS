@@ -28,7 +28,7 @@
     - none - default, don't do it
     -->
     <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
-    <property name="hibernate.hbm2ddl.auto">create</property>
+    <!-- <property name="hibernate.hbm2ddl.auto">create</property> -->
     <mapping class="org.models.Employee"/>
     <mapping class="org.models.Manager"/>
     <mapping class="org.models.ReimbursementRequest"/>
