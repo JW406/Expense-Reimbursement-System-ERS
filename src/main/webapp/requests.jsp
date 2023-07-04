@@ -6,16 +6,16 @@
         <div class="mt-3 d-flex justify-content-between">
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Active</a>
+              <a class="nav-link" href="#active">Active</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Approved</a>
+              <a class="nav-link" href="#approved">Approved</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Declined</a>
+              <a class="nav-link" href="#declined">Declined</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Recalled</a>
+              <a class="nav-link" href="#recalled">Recalled</a>
             </li>
           </ul>
           <ul class="nav nav-tabs">
@@ -36,57 +36,62 @@
     </div>
   </div>
   <script>
-    function mock(data, time = 0) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(data)
-        }, time)
+    let isAdmin = false
+
+    const thead = $('.reimbursement-table thead tr')
+      ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
+        thead.append(`<th class="w-33">\${name}</th>`)
+      })
+    const tbody = $('.reimbursement-table tbody')
+
+    function tab(state) {
+      tbody.html('')
+      fetch(window.__ctx + `/api/requestsTable?state=\${state}`, {
+        method: 'GET',
+      }
+      ).then((resp) => resp.json()).then((data) => {
+        if (data == null || !data.length) { return }
+        tbody.html('')
+        for (const d of data) {
+          console.log(d)
+          const row = $('<tr>')
+          row.append(`<td class="active w-33">\${dateFmt("yyyy-MM-dd hh:mm:ss", new Date(d['tsDate']))}</td>`)
+          row.append(`<td class="success w-33">\$\${d['reqAmnt']}</td>`)
+          const actionCell = $('<td class="w-33">')
+          if (isAdmin) {
+            actionCell.append(
+              '<button type="button" class="btn btn-primary btn-sm mr-2">Approve</button>'
+            )
+            actionCell.append(
+              '<button type="button" class="btn btn-danger btn-sm">Decline</button>'
+            )
+          } else {
+            actionCell.append(
+              '<button type="button" class="btn btn-primary btn-sm">Recall</button>'
+            )
+          }
+          row.append(actionCell)
+          tbody.append(row)
+        }
       })
     }
 
-    let isAdmin = false
+    $(() => {
+      let currTab = window.location.hash && window.location.hash.slice(1) || 'active'
+      $(`.nav-item a[href="#\${currTab}"]`).addClass('active')
+      tab(currTab)
 
-    ;(() => {
-      const thead = $('.reimbursement-table thead tr')
-        ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
-          thead.append(`<th class="w-33">\${name}</th>`)
-        })
-      const table = $('.reimbursement-table')
-      mock(
-        [
-          {
-            requestDate: '2016/10/1',
-            requestAmt: 500,
-          },
-          {
-            requestDate: '2016/10/1',
-            requestAmt: 1000,
-          },
-        ]
-        , 800).then((data) => {
-          const tbody = $('.reimbursement-table tbody')
-          for (const d of data) {
-            const row = $('<tr>')
-            row.append(`<td class="active w-33">\${d['requestDate']}</td>`)
-            row.append(`<td class="success w-33">\${d['requestAmt']}</td>`)
-            const actionCell = $('<td class="w-33">')
-            if (isAdmin) {
-              actionCell.append(
-                '<button type="button" class="btn btn-primary btn-sm mr-2">Approve</button>'
-              )
-              actionCell.append(
-                '<button type="button" class="btn btn-danger btn-sm">Decline</button>'
-              )
-            } else {
-              actionCell.append(
-                '<button type="button" class="btn btn-primary btn-sm">Recall</button>'
-              )
-            }
-            row.append(actionCell)
-            tbody.append(row)
+      $('.nav-item a').click(function () {
+        const $this = $(this)
+        setTimeout(() => {
+          if ($this[0].href === window.location.href) {
+            $this.parent().parent().find('li > a').removeClass('active')
+            $this.addClass('active')
+            tab($this[0].hash.slice(1))
           }
-        })
+        }, 0)
+      })
 
-    })()
+    })
   </script>
   <jsp:include page="footer.jsp" />

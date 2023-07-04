@@ -26,7 +26,7 @@ public class ReimbursementRequest {
   private Integer id;
   @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
   @JoinColumn(name = "requested_by", referencedColumnName = "id")
-  private Employee requestedbyEmployee;
+  private Employee requestedByEmployee;
   @Column(name = "request_amnt")
   private Double reqAmnt;
   @OneToOne(fetch = FetchType.EAGER)
@@ -53,11 +53,11 @@ public class ReimbursementRequest {
   }
 
   public Employee getRequestedbyEmployee() {
-    return requestedbyEmployee;
+    return requestedByEmployee;
   }
 
   public void setRequestedbyEmployee(Employee requestedbyEmployee) {
-    this.requestedbyEmployee = requestedbyEmployee;
+    this.requestedByEmployee = requestedbyEmployee;
   }
 
   public Double getReqAmnt() {
@@ -79,6 +79,6 @@ public class ReimbursementRequest {
   @Override
   public String toString() {
     return "ReimbursementRequest [approvedByManager=" + approvedByManager + ", id=" + id + ", reqAmnt=" + reqAmnt
-        + ", requestedbyEmployee=" + requestedbyEmployee + ", tsDate=" + tsDate + "]";
+        + ", requestedbyEmployee=" + requestedByEmployee + ", tsDate=" + tsDate + "]";
   }
 }

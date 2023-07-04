@@ -2,6 +2,7 @@ package org.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +18,7 @@ import org.RestModels.RegisterCredentials;
 import org.RestModels.SubmitReimbursementRequest;
 import org.RestModels.Response;
 import org.models.Person;
+import org.models.ReimbursementRequest;
 import org.services.Impl.AccountServicesImpl;
 import org.services.Impl.ReimbursementServiceImpl;
 import org.services.Interface.AccountServices;
@@ -80,10 +82,14 @@ public class Api extends HttpServlet {
 
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     PrintWriter out = resp.getWriter();
+    ObjectMapper mapper = new ObjectMapper();
     if (Utils.apiEndPointMatch(req, "requestsTable")) {
-      out.print("{\"foo\":\"bar\"}");
+      List<ReimbursementRequest> response = reimServ.getReimbursementRequestsByLoggedInEmail((String) req.getSession().getAttribute("email"));
+      out.print(mapper.writeValueAsString(response));
+
     } else if (Utils.apiEndPointMatch(req, "logout")) {
       req.getSession().removeAttribute("email");
+
     }
     out.close();
   }
