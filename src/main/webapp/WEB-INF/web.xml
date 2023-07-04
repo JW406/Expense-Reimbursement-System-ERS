@@ -23,6 +23,10 @@
     <servlet-class>org.servlets.Requests</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>NewRequest</servlet-name>
+    <servlet-class>org.servlets.NewRequest</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>Api</servlet-name>
     <servlet-class>org.servlets.Api</servlet-class>
   </servlet>
@@ -42,6 +46,10 @@
   <servlet-mapping>
     <servlet-name>Requests</servlet-name>
     <url-pattern>/requests</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>NewRequest</servlet-name>
+    <url-pattern>/new_request</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Api</servlet-name>

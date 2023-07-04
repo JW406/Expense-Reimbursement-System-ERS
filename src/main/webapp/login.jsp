@@ -42,7 +42,6 @@
         } else {
           $('.err-msg').text(d.msg)
         }
-        console.log(d)
       })
     })
 
