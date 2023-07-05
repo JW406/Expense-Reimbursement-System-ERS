@@ -16,9 +16,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "proj01_reimb_req")
 public class ReimbursementRequest {
+  @JsonIgnore
   @Id
   @Column
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJ01_REIMB_REQ_SEQ")
