@@ -34,7 +34,7 @@ public class Api extends HttpServlet {
     PrintWriter out = resp.getWriter();
     ObjectMapper mapper = new ObjectMapper();
 
-    if (Utils.apiEndPointMatch(req, "login")) {
+    if (Utils.apiEndPointMatch(req, "login")) { // "login"
       String body = Utils.readReqBody(req);
       LoginCredentials lc = mapper.readValue(body, LoginCredentials.class);
       LoginResponse loginResponse = new LoginResponse();
@@ -50,7 +50,7 @@ public class Api extends HttpServlet {
       }
       out.print(mapper.writeValueAsString(loginResponse));
 
-    } else if (Utils.apiEndPointMatch(req, "register")) {
+    } else if (Utils.apiEndPointMatch(req, "register")) { // "register"
       String body = Utils.readReqBody(req);
       RegisterCredentials rc = mapper.readValue(body, RegisterCredentials.class);
       Response response = new Response();
@@ -63,7 +63,7 @@ public class Api extends HttpServlet {
       }
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "submit-request")) {
+    } else if (Utils.apiEndPointMatch(req, "submit-request")) { // submit-request
       String body = Utils.readReqBody(req);
       SubmitReimbursementRequest rr = mapper.readValue(body, SubmitReimbursementRequest.class);
       Response response = new Response();

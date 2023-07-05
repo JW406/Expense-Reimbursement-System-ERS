@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,6 +40,25 @@ public class ReimbursementRequest {
   @Column
   @Temporal(TemporalType.TIMESTAMP)
   private Date tsDate;
+  @Column
+  @Enumerated(EnumType.STRING)
+  private ReimbursementState state;
+
+  public Employee getRequestedByEmployee() {
+    return requestedByEmployee;
+  }
+
+  public void setRequestedByEmployee(Employee requestedByEmployee) {
+    this.requestedByEmployee = requestedByEmployee;
+  }
+
+  public ReimbursementState getState() {
+    return state;
+  }
+
+  public void setState(ReimbursementState state) {
+    this.state = state;
+  }
 
   public Date getTsDate() {
     return tsDate;
@@ -53,14 +74,6 @@ public class ReimbursementRequest {
 
   public void setId(Integer id) {
     this.id = id;
-  }
-
-  public Employee getRequestedbyEmployee() {
-    return requestedByEmployee;
-  }
-
-  public void setRequestedbyEmployee(Employee requestedbyEmployee) {
-    this.requestedByEmployee = requestedbyEmployee;
   }
 
   public Double getReqAmnt() {
