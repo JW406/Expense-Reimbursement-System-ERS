@@ -3,7 +3,7 @@
   xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
   <display-name>Project01</display-name>
   <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>home.jsp</welcome-file>
   </welcome-file-list>
 
   <servlet>
@@ -25,6 +25,14 @@
   <servlet>
     <servlet-name>NewRequest</servlet-name>
     <servlet-class>org.servlets.NewRequest</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>EditUserInfo</servlet-name>
+    <servlet-class>org.servlets.EditUserInfo</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ChangePassword</servlet-name>
+    <servlet-class>org.servlets.ChangePassword</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>Api</servlet-name>
@@ -50,6 +58,14 @@
   <servlet-mapping>
     <servlet-name>NewRequest</servlet-name>
     <url-pattern>/new_request</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>EditUserInfo</servlet-name>
+    <url-pattern>/edit_userinfo</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ChangePassword</servlet-name>
+    <url-pattern>/change_password</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Api</servlet-name>

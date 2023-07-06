@@ -14,6 +14,10 @@ public class Person {
   private String name;
   @Column
   private String password;
+  @Column
+  private String gitHubAddress;
+  @Column
+  private String phoneNumber;
 
   public String getEmail() {
     return email;
@@ -41,8 +45,25 @@ public class Person {
     this.password = password;
   }
 
+  public String getGitHubAddress() {
+    return gitHubAddress;
+  }
+
+  public void setGitHubAddress(String gitHubAddress) {
+    this.gitHubAddress = gitHubAddress;
+  }
+
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
   @Override
   public String toString() {
-    return "Person [email=" + email + ", name=" + name + ", password=" + password + "]";
+    return "Person [email=" + email + ", gitHubAddress=" + gitHubAddress + ", name=" + name + ", password=" + password
+        + ", phoneNumber=" + phoneNumber + "]";
   }
 }

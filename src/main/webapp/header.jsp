@@ -11,6 +11,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="<%=request.getContextPath()%>/resources/libraries/js/jquery-3.5.1.slim.min.js"></script>
+  <script src="<%=request.getContextPath()%>/resources/libraries/js/underscore-min.js"></script>
   <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/libraries/css/bootstrap.min.css">
   <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/custom.css">
   <script>window.__ctx = '<%=request.getContextPath()%>'</script>
@@ -27,13 +28,11 @@
         navUserName.attr('data-toggle','dropdown')
         navUserName.attr('aria-haspopup', 'true')
         navUserName.attr('aria-expanded', 'false')
-        navUserName.html('')
-        navUserName.append($('<span>').html(username))
-        navUserName.append('<span class="caret"></span>')
+        navUserName.html(`<span>\${username}</span><span class="caret"></span>`)
         navUserName.parent().append(`
-<div class="dropdown-menu aria-labelledby=" navbarDropdown">
-<a class="dropdown-item" href="#">Action</a>
-<a class="dropdown-item" href="#">Another action</a>
+<div class="dropdown-menu aria-labelledby="navbarDropdown">
+<a class="dropdown-item" href="<%=request.getContextPath()%>/edit_userinfo">Edit User Info</a>
+<a class="dropdown-item" href="<%=request.getContextPath()%>/change_password">Change Password</a>
 <div class="dropdown-divider"></div>
 <button class="dropdown-item logout-btn">Logout</button>
 </div>
