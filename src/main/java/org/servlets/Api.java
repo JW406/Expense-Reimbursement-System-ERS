@@ -15,10 +15,12 @@ import org.Utils;
 import org.RestModels.LoginCredentials;
 import org.RestModels.LoginResponse;
 import org.RestModels.RegisterCredentials;
-import org.RestModels.SubmitReimbursementRequest;
 import org.RestModels.Response;
+import org.RestModels.SubmitReimbursementRequest;
+import org.RestModels.SubmitReimbursementUpdateRequest;
 import org.models.Person;
 import org.models.ReimbursementRequest;
+import org.models.ReimbursementState;
 import org.services.Impl.AccountServicesImpl;
 import org.services.Impl.ReimbursementServiceImpl;
 import org.services.Interface.AccountServices;
@@ -75,6 +77,20 @@ public class Api extends HttpServlet {
         response.setMsg("Reimbursement request not sent");
       }
       out.print(mapper.writeValueAsString(response));
+
+    } else if (Utils.apiEndPointMatch(req, "request-update")) { // request-update
+      String body = Utils.readReqBody(req);
+      SubmitReimbursementUpdateRequest rr = mapper.readValue(body, SubmitReimbursementUpdateRequest.class);
+      Response response = new Response();
+      if (reimServ.updateReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
+        response.setIsSuccess(true);
+        response.setMsg("Reimbursement request update successful");
+      } else {
+        response.setIsSuccess(false);
+        response.setMsg("Reimbursement request update failed");
+      }
+      out.print(mapper.writeValueAsString(response));
+
     }
 
     out.close();
@@ -84,7 +100,10 @@ public class Api extends HttpServlet {
     PrintWriter out = resp.getWriter();
     ObjectMapper mapper = new ObjectMapper();
     if (Utils.apiEndPointMatch(req, "requestsTable")) {
-      List<ReimbursementRequest> response = reimServ.getReimbursementRequestsByLoggedInEmail((String) req.getSession().getAttribute("email"));
+      ReimbursementState state = ReimbursementState.valueOf(req.getParameter("state"));
+      System.out.println(req.getParameter("state"));
+      List<ReimbursementRequest> response = reimServ
+          .getReimbursementRequestsByLoggedInEmail((String) req.getSession().getAttribute("email"), state);
       out.print(mapper.writeValueAsString(response));
 
     } else if (Utils.apiEndPointMatch(req, "logout")) {
