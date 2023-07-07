@@ -75,6 +75,8 @@
         body: JSON.stringify({ fullName, phoneNumber, gitHubUsername }),
       }).then((d) => d.json()).then((d) => {
         if (d['isSuccess']) {
+          window.localStorage.setItem('username', fullName)
+          window.location.reload()
           alert('success')
         }
       })
