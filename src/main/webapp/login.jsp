@@ -3,12 +3,12 @@
   <div class="login-window mt-5">
     <form id="login">
       <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
+        <label for="emailInput">Email address</label>
         <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" autocomplete="current-password">
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
+        <label for="passwordInput">Password</label>
         <input type="password" class="form-control" id="passwordInput" autocomplete="current-password">
       </div>
       <div class="form-group form-check">
@@ -38,6 +38,7 @@
       ).then((resp) => resp.json()).then((d) => {
         if (d['isSuccess']) {
           window.localStorage.setItem('username', d['username'])
+          window.localStorage.setItem('ismanager', d['isManager'])
           window.location.href = window.__ctx + '/home';
         } else {
           $('.err-msg').text(d.msg)

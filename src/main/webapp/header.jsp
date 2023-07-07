@@ -28,7 +28,7 @@
         navUserName.attr('data-toggle','dropdown')
         navUserName.attr('aria-haspopup', 'true')
         navUserName.attr('aria-expanded', 'false')
-        navUserName.html(`<span>\${username}</span><span class="caret"></span>`)
+        navUserName.html(`<span>\${window.localStorage.getItem('ismanager') === 'true' ? '(Mnager)  ' : ''}\${username}</span><span class="caret"></span>`)
         navUserName.parent().append(`
 <div class="dropdown-menu aria-labelledby="navbarDropdown">
 <a class="dropdown-item" href="<%=request.getContextPath()%>/edit_userinfo">Edit User Info</a>

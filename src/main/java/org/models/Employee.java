@@ -24,10 +24,6 @@ public class Employee extends Person {
   @SequenceGenerator(name = "PROJ01_EMP_SEQ", sequenceName = "PROJ01_EMP_S", allocationSize = 1)
   @Column
   private Integer id;
-  @Column
-  private String email;
-  @Column
-  private String name;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "manager_id", referencedColumnName = "id")
@@ -41,22 +37,6 @@ public class Employee extends Person {
     this.id = id;
   }
 
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public Manager getManager() {
     return manager;
   }
@@ -67,6 +47,6 @@ public class Employee extends Person {
 
   @Override
   public String toString() {
-    return "Employee [email=" + email + ", id=" + id + ", name=" + name + "]";
+    return "Employee [id=" + id + "]";
   }
 }
