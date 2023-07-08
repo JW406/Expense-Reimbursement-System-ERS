@@ -38,17 +38,22 @@
 
     $(() => {
       isAdmin = window.localStorage.getItem('ismanager') === 'true'
-      const thead = $('.reimbursement-table thead tr')
-        ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
-          thead.append(`<th class="w-33">\${name}</th>`)
-        })
       tbody = $('.reimbursement-table tbody')
       if (!isAdmin) {
+        const thead = $('.reimbursement-table thead tr')
+          ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
+            thead.append(`<th class="w-33">\${name}</th>`)
+          })
         $('.nav-tabs.left').append(`
                   <li class="nav-item">
                     <a class="nav-link" href="#recalled">Recalled</a>
                   </li>
               `)
+      } else {
+        const thead = $('.reimbursement-table thead tr')
+          ;['Request Date', 'Requested By', 'Request Amount', 'Actions'].forEach((name) => {
+            thead.append(`<th class="w-25">\${name}</th>`)
+          })
       }
     })
 
@@ -82,9 +87,10 @@
         tbody.html('')
         for (const d of data) {
           const row = $('<tr>')
-          row.append(`<td class="active w-33">\${dateFmt("yyyy-MM-dd hh:mm:ss", new Date(d['tsDate']))}</td>`)
-          row.append(`<td class="success w-33">\$\${d['reqAmnt']}</td>`)
-          const actionCell = $('<td class="w-33">')
+          row.append(`<td class="w-25">\${dateFmt("yyyy-MM-dd hh:mm:ss", new Date(d['tsDate']))}</td>`)
+          row.append(`<td class="w-25">\${d.requestedByEmployee.email}</td>`)
+          row.append(`<td class="w-25">\$\${d['reqAmnt']}</td>`)
+          const actionCell = $('<td class="w-25">')
           if (state === 'active') {
             actionCell.append(
               `<button type="button" class="btn btn-primary btn-sm mr-2 btn-recall" data-id="\${d['id']}">Approve</button>`

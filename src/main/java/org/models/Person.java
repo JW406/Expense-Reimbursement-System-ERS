@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @MappedSuperclass
 public class Person {
-  @Column
+  @Column(unique = true)
   private String email;
   @Column
   private String name;
