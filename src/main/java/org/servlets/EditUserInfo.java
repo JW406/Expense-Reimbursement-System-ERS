@@ -15,7 +15,7 @@ public class EditUserInfo extends HttpServlet {
     if (req.getSession().getAttribute("email") == null) {
       resp.sendRedirect(req.getContextPath() + "/login");
     } else {
-      req.getRequestDispatcher("/edit_userinfo.jsp").forward(req, resp);
+      req.getRequestDispatcher("/WEB-INF/edit_userinfo.jsp").forward(req, resp);
     }
   }
 }
