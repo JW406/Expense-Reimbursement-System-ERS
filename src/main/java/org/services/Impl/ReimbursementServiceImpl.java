@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.DBUtils;
-import org.RestModels.SubmitReimbursementRequest;
 import org.RestModels.SubmitReimbursementUpdateRequest;
+import org.RestModels.sendReimbursementRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
@@ -18,7 +18,7 @@ import org.services.Interface.ReimbursementService;
 
 public class ReimbursementServiceImpl implements ReimbursementService {
   @Override
-  public Boolean acceptReimbursementRequest(SubmitReimbursementRequest rr, String email) {
+  public Boolean employeeSendReimbursementRequest(sendReimbursementRequest rr, String email) {
     Session sess = DBUtils.getSession();
     Transaction tx = sess.beginTransaction();
 
@@ -94,8 +94,8 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     try {
       int idx = 0;
       res = sess.createQuery(
-          "from ReimbursementRequest r where r.requestedByEmployee in (select e.id from Employee e where e.manager.id = ?1)")
-          .setParameter(++idx, manager.getId()).list();
+          "from ReimbursementRequest r where r.state = ?1 and r.requestedByEmployee in (select e.id from Employee e where e.manager.id = ?2)")
+          .setParameter(++idx, state).setParameter(++idx, manager.getId()).list();
     } catch (Exception e) {
       // TODO: use logger
       e.printStackTrace();
@@ -104,5 +104,29 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       sess.close();
     }
     return res;
+  }
+
+  @Override
+  public Boolean managerAcceptReimbursementRequest(SubmitReimbursementUpdateRequest rr, String email) {
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+    try {
+      int idx = 0;
+      // TODO: use "handled by"
+      int res = sess.createQuery(
+          "update ReimbursementRequest r set r.state = ?1, r.approvedByManager = (select m.id from Manager m where m.email = ?2) where r.id = ?3")
+          .setParameter(++idx, rr.getState()).setParameter(++idx, email).setParameter(++idx, rr.getId())
+          .executeUpdate();
+      tx.commit();
+      return res > 0;
+    } catch (Exception e) {
+      // TODO: use logger
+      e.printStackTrace();
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
+    }
+
+    return false;
   }
 }

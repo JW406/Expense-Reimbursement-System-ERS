@@ -15,11 +15,6 @@
               <a class="nav-link" href="#declined">Declined</a>
             </li>
           </ul>
-          <ul class="nav nav-tabs right">
-            <li class="nav-item">
-              <a class="nav-link btn btn-success btn-sm" href="<%=request.getContextPath()%>/new_request">New</a>
-            </li>
-          </ul>
         </div>
         <div class="table-responsive">
           <table class="table table-sm reimbursement-table">
@@ -33,34 +28,30 @@
     </div>
   </div>
   <script>
-    let isAdmin
     let tbody
 
-    $(() => {
-      isAdmin = window.localStorage.getItem('ismanager') === 'true'
-      tbody = $('.reimbursement-table tbody')
-      if (!isAdmin) {
-        const thead = $('.reimbursement-table thead tr')
-          ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
-            thead.append(`<th class="w-33">\${name}</th>`)
-          })
-        $('.nav-tabs.left').append(`
-                  <li class="nav-item">
-                    <a class="nav-link" href="#recalled">Recalled</a>
-                  </li>
-              `)
-      } else {
-        const thead = $('.reimbursement-table thead tr')
-          ;['Request Date', 'Requested By', 'Request Amount', 'Actions'].forEach((name) => {
-            thead.append(`<th class="w-25">\${name}</th>`)
-          })
-      }
-    })
-
-    function requestActions(state) {
+    function employeeRequestActions(state) {
       return (e) => {
         const id = e.target.dataset['id']
         fetch(window.__ctx + '/api/request-update', {
+          method: 'POST',
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify({ id, state }),
+        }
+        ).then((resp) => resp.json()).then((data) => {
+          if (data['isSuccess']) {
+            window.location.reload()
+          }
+        })
+      }
+    }
+
+    function managerRequestActions(state) {
+      return (e) => {
+        const id = e.target.dataset['id']
+        fetch(window.__ctx + '/api/manager-actions', {
           method: 'POST',
           headers: {
             "Content-type": "application/json; charset=UTF-8",
@@ -93,7 +84,7 @@
           const actionCell = $('<td class="w-25">')
           if (state === 'active') {
             actionCell.append(
-              `<button type="button" class="btn btn-primary btn-sm mr-2 btn-recall" data-id="\${d['id']}">Approve</button>`
+              `<button type="button" class="btn btn-primary btn-sm mr-2 btn-approve" data-id="\${d['id']}">Approve</button>`
             )
             actionCell.append(
               `<button type="button" class="btn btn-danger btn-sm btn-decline" data-id="\${d['id']}">Decline</button>`
@@ -106,9 +97,9 @@
           row.append(actionCell)
           tbody.append(row)
         }
-        tbody.find('.btn-approve').click(requestActions('approved'))
-        tbody.find('.btn-decline').click(requestActions('declined'))
-        tbody.find('.btn-resend').click(requestActions('active'))
+        tbody.find('.btn-approve').click(managerRequestActions('approved'))
+        tbody.find('.btn-decline').click(managerRequestActions('declined'))
+        tbody.find('.btn-resend').click(managerRequestActions('active'))
       })
     }
 
@@ -141,17 +132,44 @@
           row.append(actionCell)
           tbody.append(row)
         }
-        tbody.find('.btn-approve').click(requestActions('approved'))
-        tbody.find('.btn-decline').click(requestActions('declined'))
-        tbody.find('.btn-resend').click(requestActions('active'))
-        tbody.find('.btn-recall').click(requestActions('recalled'))
+        tbody.find('.btn-approve').click(employeeRequestActions('approved'))
+        tbody.find('.btn-decline').click(employeeRequestActions('declined'))
+        tbody.find('.btn-resend').click(employeeRequestActions('active'))
+        tbody.find('.btn-recall').click(employeeRequestActions('recalled'))
       })
     }
 
     $(() => {
+      tbody = $('.reimbursement-table tbody')
+
+      if (!getIsAdmin()) {
+        const thead = $('.reimbursement-table thead tr')
+          ;['Request Date', 'Request Amount', 'Actions'].forEach((name) => {
+            thead.append(`<th class="w-33">\${name}</th>`)
+          })
+        $('.nav-tabs.left').append(`
+                  <li class="nav-item">
+                    <a class="nav-link" href="#recalled">Recalled</a>
+                  </li>
+              `)
+        $('.nav-tabs.left').parent().append(`
+          <ul class="nav nav-tabs right">
+            <li class="nav-item">
+              <a class="nav-link btn btn-success btn-sm" href="<%=request.getContextPath()%>/new_request">New</a>
+            </li>
+          </ul>
+              `)
+
+      } else {
+        const thead = $('.reimbursement-table thead tr')
+          ;['Request Date', 'Requested By', 'Request Amount', 'Actions'].forEach((name) => {
+            thead.append(`<th class="w-25">\${name}</th>`)
+          })
+      }
+
       let currTab = window.location.hash && window.location.hash.slice(1) || 'active'
       $(`.nav-item a[href="#\${currTab}"]`).addClass('active')
-      if (isAdmin) {
+      if (getIsAdmin()) {
         populateManagerTable(currTab)
       } else {
         populateEmployeeTable(currTab)
@@ -163,7 +181,7 @@
           if ($this[0].href === window.location.href) {
             $this.parent().parent().find('li > a').removeClass('active')
             $this.addClass('active')
-            if (isAdmin) {
+            if (getIsAdmin()) {
               populateManagerTable($this[0].hash.slice(1))
             } else {
               populateEmployeeTable($this[0].hash.slice(1))

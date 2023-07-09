@@ -20,6 +20,7 @@ public class DBUtils {
       hibernateCfg = new File(url.toURI());
     } catch (Exception e) {
       e.printStackTrace();
+      // TODO: use file name
       throw new HibernateException("File not found");
     }
     Configuration config = new Configuration().configure(hibernateCfg);
