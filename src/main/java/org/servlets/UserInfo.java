@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ViewAllEmployees extends HttpServlet {
+public class UserInfo extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -15,7 +15,7 @@ public class ViewAllEmployees extends HttpServlet {
     if (req.getSession().getAttribute("email") == null) {
       resp.sendRedirect(req.getContextPath() + "/login");
     } else {
-      req.getRequestDispatcher("/WEB-INF/view-all-employees.jsp").forward(req, resp);
+      req.getRequestDispatcher("/WEB-INF/user-info.jsp").forward(req, resp);
     }
   }
 }

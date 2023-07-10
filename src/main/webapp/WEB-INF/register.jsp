@@ -7,6 +7,10 @@
         <label for="exampleInputEmail1">Email address</label>
         <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp">
       </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="is-manager">
+        <label class="form-check-label" for="is-manager">As a manager</label>
+      </div>
       <div class="form-group">
         <label for="your-name">Name</label>
         <input type="text" class="form-control" id="your-name"">

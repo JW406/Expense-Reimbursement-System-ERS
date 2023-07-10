@@ -39,6 +39,10 @@
     <servlet-class>org.servlets.ViewAllEmployees</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>UserInfo</servlet-name>
+    <servlet-class>org.servlets.UserInfo</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>Api</servlet-name>
     <servlet-class>org.servlets.Api</servlet-class>
   </servlet>
@@ -74,6 +78,10 @@
   <servlet-mapping>
     <servlet-name>ViewAllEmployees</servlet-name>
     <url-pattern>/view-all-employees</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UserInfo</servlet-name>
+    <url-pattern>/user-info</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Api</servlet-name>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.DBUtils;
+import org.RestModels.EmployeeChangeManagerRequest;
 import org.RestModels.LoginCredentials;
 import org.RestModels.PasswordChangeRequest;
 import org.RestModels.RegisterCredentials;
@@ -11,7 +12,9 @@ import org.RestModels.UpdateAccountInfo;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
+import org.models.Manager;
 import org.models.Person;
+import org.services.Service;
 import org.services.Interface.AccountServices;
 
 public class AccountServicesImpl implements AccountServices {
@@ -20,20 +23,21 @@ public class AccountServicesImpl implements AccountServices {
     Session sess = DBUtils.getSession();
     Transaction tx = sess.beginTransaction();
 
-    Employee employee = new Employee();
-    employee.setEmail(rc.getEmail());
-    employee.setPassword(rc.getPassword());
-    employee.setName(rc.getName());
     try {
+      Employee employee = new Employee();
+      employee.setEmail(rc.getEmail());
+      employee.setPassword(rc.getPassword());
+      employee.setName(rc.getName());
       sess.save(employee);
       tx.commit();
-      sess.close();
+      return true;
     } catch (Exception e) {
       // TODO: logger
       System.out.println(e.getMessage());
-      return false;
+    } finally {
+      sess.close();
     }
-    return true;
+    return false;
   }
 
   @Override
@@ -63,20 +67,27 @@ public class AccountServicesImpl implements AccountServices {
   public Boolean updateAccountInfo(UpdateAccountInfo lc, String email) {
     Session sess = DBUtils.getSession();
     Transaction tx = sess.beginTransaction();
+    Person person = Service.getPersonRecordByEmail(email);
 
     int res = 0;
     try {
       int idx = 0;
-      res = sess
-          .createQuery("update Employee e set e.name = ?1, e.phoneNumber = ?2, e.gitHubAddress = ?3 where e.email = ?4")
-          .setParameter(++idx, lc.getFullName()).setParameter(++idx, lc.getPhoneNumber())
+      String HQL = "update ";
+      if (person instanceof Employee) {
+        HQL += "Employee";
+      } else if (person instanceof Manager) {
+        HQL += "Manager";
+      }
+      HQL += " e set e.name = ?1, e.phoneNumber = ?2, e.gitHubAddress = ?3 where e.email = ?4";
+      res = sess.createQuery(HQL).setParameter(++idx, lc.getFullName()).setParameter(++idx, lc.getPhoneNumber())
           .setParameter(++idx, lc.getGitHubUsername()).setParameter(++idx, email).executeUpdate();
       tx.commit();
-      sess.close();
 
     } catch (Exception e) {
       // TODO: use logger
       System.out.println(e.getMessage());
+    } finally {
+      sess.close();
     }
     return res > 0;
   }
@@ -101,6 +112,67 @@ public class AccountServicesImpl implements AccountServices {
     } catch (Exception e) {
       // TODO: use logger
       System.out.println(e.getMessage());
+    }
+    return res > 0;
+  }
+
+  @Override
+  public List<Employee> getAllEmployeesByManager(String email) {
+    Session sess = DBUtils.getSession();
+
+    List<Employee> res = new ArrayList<>();
+
+    try {
+      int idx = 0;
+      res = sess.createQuery("from Employee e where e.manager = (select m.id from Manager m where m.email = ?1)")
+          .setParameter(++idx, email).list();
+    } catch (Exception e) {
+      // TODO: use logger
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
+    }
+
+    return res;
+  }
+
+  @Override
+  public List<Manager> getAllManagers() {
+    Session sess = DBUtils.getSession();
+
+    List<Manager> res = new ArrayList<>();
+
+    try {
+      res = sess.createQuery("from Manager").list();
+    } catch (Exception e) {
+      // TODO: use logger
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
+    }
+
+    return res;
+  }
+
+  @Override
+  public Boolean employeeChangeManager(String email, EmployeeChangeManagerRequest rr) {
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+
+    int res = 0;
+    try {
+      int idx = 0;
+      res = sess
+          .createQuery(
+              "update Employee e set e.manager = (select id from Manager m where m.email = ?1) where e.email = ?2")
+          .setParameter(++idx, rr.getManagerEmail()).setParameter(++idx, email).executeUpdate();
+      tx.commit();
+
+    } catch (Exception e) {
+      // TODO: use logger
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
     }
     return res > 0;
   }

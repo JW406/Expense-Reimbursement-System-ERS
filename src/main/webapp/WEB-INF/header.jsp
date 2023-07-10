@@ -28,7 +28,7 @@
         navUserName.attr('data-toggle','dropdown')
         navUserName.attr('aria-haspopup', 'true')
         navUserName.attr('aria-expanded', 'false')
-        navUserName.html(`<span>\${window.localStorage.getItem('ismanager') === 'true' ? '(Mnager)  ' : ''}\${username}</span><span class="caret"></span>`)
+        navUserName.html(`<span>\${window.localStorage.getItem('ismanager') === 'true' ? '(Manger)  ' : ''}\${username}</span><span class="caret"></span>`)
         navUserName.parent().append(`
 <div class="dropdown-menu aria-labelledby="navbarDropdown">
 <a class="dropdown-item" href="<%=request.getContextPath()%>/edit_userinfo">Edit User Info</a>
@@ -58,6 +58,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<%=request.getContextPath()%>/requests">View Requests</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<%=request.getContextPath()%>/user-info">User Info</a>
         </li>
       </ul>
       <ul class="navbar-nav">
