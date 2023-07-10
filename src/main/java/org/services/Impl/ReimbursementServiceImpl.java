@@ -28,7 +28,6 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       reimbursementRequest.setReqAmnt(rr.getRequestAmnt());
       reimbursementRequest.setRequestedByEmployee((Employee) Service.getPersonRecordByEmail(email));
       reimbursementRequest.setState(ReimbursementState.active);
-      System.out.println(reimbursementRequest);
       sess.save(reimbursementRequest);
 
       tx.commit();
@@ -121,7 +120,27 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       return res > 0;
     } catch (Exception e) {
       // TODO: use logger
-      e.printStackTrace();
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
+    }
+
+    return false;
+  }
+
+  @Override
+  public Boolean managerReimbursementRequestComment(SubmitReimbursementUpdateRequest rr, String email) {
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+
+    try {
+      int idx = 0;
+      int res = sess.createQuery("update ReimbursementRequest r set r.mgrComment = ?1 where r.id = ?2")
+          .setParameter(++idx, rr.getPayload()).setParameter(++idx, rr.getId()).executeUpdate();
+      tx.commit();
+      return res > 0;
+
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     } finally {
       sess.close();

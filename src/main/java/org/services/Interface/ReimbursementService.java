@@ -17,4 +17,6 @@ public interface ReimbursementService {
   List<ReimbursementRequest> getManagedEmployeeRequests(String email, ReimbursementState state);
 
   Boolean managerAcceptReimbursementRequest(SubmitReimbursementUpdateRequest rr, String email);
+
+  Boolean managerReimbursementRequestComment(SubmitReimbursementUpdateRequest rr, String email);
 }

@@ -5,6 +5,15 @@ import org.models.ReimbursementState;
 public class SubmitReimbursementUpdateRequest {
   private Integer id;
   private ReimbursementState state;
+  private String payload;
+
+  public String getPayload() {
+    return payload;
+  }
+
+  public void setPayload(String payload) {
+    this.payload = payload;
+  }
 
   public Integer getId() {
     return id;

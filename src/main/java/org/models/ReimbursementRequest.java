@@ -41,6 +41,16 @@ public class ReimbursementRequest {
   @Column
   @Enumerated(EnumType.STRING)
   private ReimbursementState state;
+  @Column
+  private String mgrComment;
+
+  public String getMgrComment() {
+    return mgrComment;
+  }
+
+  public void setMgrComment(String mgrComment) {
+    this.mgrComment = mgrComment;
+  }
 
   public Employee getRequestedByEmployee() {
     return requestedByEmployee;

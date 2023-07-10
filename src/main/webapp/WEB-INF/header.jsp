@@ -51,7 +51,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse justify-content-between" id="navbar-header">
+    <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="<%=request.getContextPath()%>/home">Home</a>

@@ -66,10 +66,19 @@
       }
     }
 
+    function managerCommentPopup(e) {
+      const id = e.target.dataset['id']
+      $('body > .modal .modal-text').val($(e.target).data()['comment'])
+      $('body > .modal .modal-text').data({ id })
+
+      $('body > .modal').show()
+    }
+
     function populateManagerTable(state) {
       tbody.find('.btn-approve').unbind()
       tbody.find('.btn-decline').unbind()
       tbody.find('.btn-resend').unbind()
+      tbody.find('.btn-comment').unbind()
       tbody.html('')
       fetch(window.__ctx + `/api/requestManagedEmployeeRequests?state=\${state}`, {
         method: 'GET',
@@ -91,15 +100,17 @@
             )
           } else if (state === 'approved' || state === 'declined') {
             actionCell.append(
-              `<button type="button" class="btn btn-primary btn-sm btn-resend" data-id="\${d['id']}">Comment</button>`
+              `<button type="button" class="btn btn-primary btn-sm btn-comment" data-id="\${d['id']}">Comment</button>`
             )
           }
+          actionCell.find('.btn-comment').data({ comment: d['mgrComment'] })
           row.append(actionCell)
           tbody.append(row)
         }
         tbody.find('.btn-approve').click(managerRequestActions('approved'))
         tbody.find('.btn-decline').click(managerRequestActions('declined'))
         tbody.find('.btn-resend').click(managerRequestActions('active'))
+        tbody.find('.btn-comment').click(managerCommentPopup)
       })
     }
 
