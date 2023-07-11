@@ -16,6 +16,9 @@ import org.models.ReimbursementState;
 import org.services.Service;
 import org.services.Interface.ReimbursementService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ReimbursementServiceImpl implements ReimbursementService {
   @Override
   public Boolean employeeSendReimbursementRequest(sendReimbursementRequest rr, String email) {
@@ -71,8 +74,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
       tx.commit();
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
@@ -96,9 +98,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
           "from ReimbursementRequest r where r.state = ?1 and r.requestedByEmployee in (select e.id from Employee e where e.manager.id = ?2)")
           .setParameter(++idx, state).setParameter(++idx, manager.getId()).list();
     } catch (Exception e) {
-      // TODO: use logger
-      e.printStackTrace();
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
@@ -119,8 +119,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       tx.commit();
       return res > 0;
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }

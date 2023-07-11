@@ -17,6 +17,9 @@ import org.models.Person;
 import org.services.Service;
 import org.services.Interface.AccountServices;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class AccountServicesImpl implements AccountServices {
   @Override
   public Boolean registerAccount(RegisterCredentials rc) {
@@ -37,8 +40,7 @@ public class AccountServicesImpl implements AccountServices {
       tx.commit();
       return true;
     } catch (Exception e) {
-      // TODO: logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
@@ -60,8 +62,7 @@ public class AccountServicesImpl implements AccountServices {
       }
       return (Person) accs.get(0);
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
@@ -89,8 +90,7 @@ public class AccountServicesImpl implements AccountServices {
       tx.commit();
 
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
@@ -115,8 +115,7 @@ public class AccountServicesImpl implements AccountServices {
       sess.close();
 
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     }
     return res > 0;
   }
@@ -132,8 +131,7 @@ public class AccountServicesImpl implements AccountServices {
       res = sess.createQuery("from Employee e where e.manager = (select m.id from Manager m where m.email = ?1)")
           .setParameter(++idx, email).list();
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
@@ -150,8 +148,7 @@ public class AccountServicesImpl implements AccountServices {
     try {
       res = sess.createQuery("from Manager").list();
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
@@ -174,8 +171,7 @@ public class AccountServicesImpl implements AccountServices {
       tx.commit();
 
     } catch (Exception e) {
-      // TODO: use logger
-      System.out.println(e.getMessage());
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
