@@ -72,6 +72,7 @@
       $('body > .modal .modal-text').data({ id })
 
       $('body > .modal').show()
+      $('body > .modal .modal-text').focus()
     }
 
     function populateManagerTable(state) {

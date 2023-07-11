@@ -8,7 +8,7 @@
         <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp">
       </div>
       <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="is-manager">
+        <input type="checkbox" class="form-check-input" id="is-manager" value="0" onclick="this.value=(this.value==0)?1:0">
         <label class="form-check-label" for="is-manager">As a manager</label>
       </div>
       <div class="form-group">
@@ -38,6 +38,7 @@
       const name = ev.target['your-name'].value
       const password = ev.target['passwordInput'].value
       const password2 = ev.target['repeatPasswordInput'].value
+      const isManager = ev.target['is-manager'].value === '1'
       if (password !== password2) {
         $('.err-msg').text('Passwords don\'t match')
       } else {
@@ -46,7 +47,7 @@
           headers: {
             "Content-type": "application/json; charset=UTF-8",
           },
-          body: JSON.stringify({ email, password, name }),
+          body: JSON.stringify({ email, password, name, isManager }),
         }
         ).then((resp) => resp.json()).then((d) => {
           if (d['isSuccess']) {

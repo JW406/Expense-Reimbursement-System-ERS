@@ -4,6 +4,15 @@ public class RegisterCredentials {
   private String email;
   private String password;
   private String name;
+  private Boolean isManager;
+
+  public Boolean getIsManager() {
+    return isManager;
+  }
+
+  public void setIsManager(Boolean isManager) {
+    this.isManager = isManager;
+  }
 
   public String getName() {
     return name;

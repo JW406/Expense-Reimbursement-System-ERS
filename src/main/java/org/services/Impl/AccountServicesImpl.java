@@ -23,12 +23,17 @@ public class AccountServicesImpl implements AccountServices {
     Session sess = DBUtils.getSession();
     Transaction tx = sess.beginTransaction();
 
+    Person person = null;
+    if (rc.getIsManager()) {
+      person = new Manager();
+    } else {
+      person = new Employee();
+    }
     try {
-      Employee employee = new Employee();
-      employee.setEmail(rc.getEmail());
-      employee.setPassword(rc.getPassword());
-      employee.setName(rc.getName());
-      sess.save(employee);
+      person.setEmail(rc.getEmail());
+      person.setPassword(rc.getPassword());
+      person.setName(rc.getName());
+      sess.save(person);
       tx.commit();
       return true;
     } catch (Exception e) {
