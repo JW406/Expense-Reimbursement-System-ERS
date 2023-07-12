@@ -50,14 +50,14 @@
             button.data({ email: item['email'] })
             menu.append(button)
           }
-          console.log(managers)
+          const $toggle = $('.card-body .dropdown > .dropdown-toggle')
           $('.dropdown-item').click(function () {
             const $this = $(this)
-            $('.dropdown-toggle').text($this.text())
-            $('.dropdown-toggle').data({ email: $this.data()['email'] })
+            $toggle.text($this.text())
+            $toggle.data({ email: $this.data()['email'] })
           })
           $('.submit-manager-change').click(() => {
-            const managerEmail = $('.dropdown-toggle').data()['email']
+            const managerEmail = $toggle.data()['email']
             fetch(window.__ctx + '/api/employee-change-manager', {
               method: 'POST',
               headers: {

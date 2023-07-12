@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
   <jsp:include page="header.jsp" />
   <div class="mt-3 container">
-    <table class="table">
+    <table class="table" class="display" cellspacing="0" width="100%">
       <thead class="thead-light">
         <tr>
           <th scope="col">#</th>
@@ -29,7 +29,9 @@
             </tr>
           `)
         }
+        $('.table').dataTable();
       })
     })
   </script>
+
   <jsp:include page="footer.jsp" />
