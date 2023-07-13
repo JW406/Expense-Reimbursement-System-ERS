@@ -13,13 +13,15 @@ import org.models.Manager;
 import org.models.Person;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
-import org.services.Service;
+import org.services.Interface.AccountServices;
 import org.services.Interface.ReimbursementService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ReimbursementServiceImpl implements ReimbursementService {
+  private static AccountServices accSrv = new AccountServicesImpl();
+
   @Override
   public Boolean employeeSendReimbursementRequest(sendReimbursementRequest rr, String email) {
     Session sess = DBUtils.getSession();
@@ -29,7 +31,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
       reimbursementRequest.setTsDate(new Date(rr.getTimestamp()));
       reimbursementRequest.setReqAmnt(rr.getRequestAmnt());
-      reimbursementRequest.setRequestedByEmployee((Employee) Service.getPersonRecordByEmail(email));
+      reimbursementRequest.setRequestedByEmployee((Employee) accSrv.getPersonRecordByEmail(email));
       reimbursementRequest.setState(ReimbursementState.active);
       sess.save(reimbursementRequest);
 
@@ -48,7 +50,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     List<ReimbursementRequest> res = null;
     try {
       int idx = 0;
-      Person em = Service.getPersonRecordByEmail(email);
+      Person em = accSrv.getPersonRecordByEmail(email);
       res = sess.createQuery("from ReimbursementRequest where requestedByEmployee = ?1 and state = ?2")
           .setParameter(++idx, em).setParameter(++idx, state).list();
 
@@ -83,7 +85,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 
   @Override
   public List<ReimbursementRequest> getManagedEmployeeRequests(String email, ReimbursementState state) {
-    Person person = Service.getPersonRecordByEmail(email);
+    Person person = accSrv.getPersonRecordByEmail(email);
     Manager manager = null;
     if (!(person instanceof Manager)) {
       return null;

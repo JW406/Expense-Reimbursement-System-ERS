@@ -8,6 +8,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Database connection utility class
+ */
 public class DBUtils {
   private static SessionFactory sessionFactory;
   static {
@@ -20,8 +23,7 @@ public class DBUtils {
       hibernateCfg = new File(url.toURI());
     } catch (Exception e) {
       e.printStackTrace();
-      // TODO: use file name
-      throw new HibernateException("File not found");
+      throw new HibernateException(url.getFile() + " not found");
     }
     Configuration config = new Configuration().configure(hibernateCfg);
     config.setProperty("hibernate.connection.url", System.getenv("rds_url"));
