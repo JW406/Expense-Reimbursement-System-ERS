@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.DBUtils;
+import org.RestModels.SendReimbursementRequest;
 import org.RestModels.SubmitReimbursementUpdateRequest;
-import org.RestModels.sendReimbursementRequest;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.models.Employee;
@@ -23,7 +23,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
   private static AccountServices accSrv = new AccountServicesImpl();
 
   @Override
-  public Boolean employeeSendReimbursementRequest(sendReimbursementRequest rr, String email) {
+  public Integer employeeSendReimbursementRequest(SendReimbursementRequest rr, String email) {
     Session sess = DBUtils.getSession();
     Transaction tx = sess.beginTransaction();
 
@@ -33,15 +33,17 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       reimbursementRequest.setReqAmnt(rr.getRequestAmnt());
       reimbursementRequest.setRequestedByEmployee((Employee) accSrv.getPersonRecordByEmail(email));
       reimbursementRequest.setState(ReimbursementState.active);
-      sess.save(reimbursementRequest);
+      Integer res = (Integer)sess.save(reimbursementRequest);
 
       tx.commit();
+      log.info("{} just send an reimbursement request with amount {}", email, rr.getRequestAmnt());
+      return res;
     } catch (Exception e) {
-      return false;
+      log.warn(e.getMessage());
     } finally {
       sess.close();
     }
-    return true;
+    return null;
   }
 
   @Override
@@ -80,6 +82,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     } finally {
       sess.close();
     }
+    log.info("{} updated one of their reimbursement request", email);
     return res > 0;
   }
 
@@ -119,6 +122,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
           .setParameter(++idx, rr.getState()).setParameter(++idx, email).setParameter(++idx, rr.getId())
           .executeUpdate();
       tx.commit();
+      log.info("manager {} accepted person with id {}'s reimbursement request", email, rr.getId());
       return res > 0;
     } catch (Exception e) {
       log.warn(e.getMessage());
@@ -139,6 +143,29 @@ public class ReimbursementServiceImpl implements ReimbursementService {
       int res = sess.createQuery("update ReimbursementRequest r set r.mgrComment = ?1 where r.id = ?2")
           .setParameter(++idx, rr.getPayload()).setParameter(++idx, rr.getId()).executeUpdate();
       tx.commit();
+      log.info("manager {} commented on request with id {}", email, rr.getId());
+      return res > 0;
+
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    } finally {
+      sess.close();
+    }
+
+    return false;
+  }
+
+  @Override
+  public Boolean deleteAnRequest(Integer id) {
+    Session sess = DBUtils.getSession();
+    Transaction tx = sess.beginTransaction();
+
+    try {
+      int idx = 0;
+      int res = sess.createQuery("delete ReimbursementRequest r where r.id = ?1")
+          .setParameter(++idx, id).executeUpdate();
+      tx.commit();
+      log.info("Reimbursement request with id {} was just deleted", id);
       return res > 0;
 
     } catch (Exception e) {

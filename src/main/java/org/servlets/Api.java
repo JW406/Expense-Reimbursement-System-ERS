@@ -21,7 +21,7 @@ import org.RestModels.RegisterCredentials;
 import org.RestModels.Response;
 import org.RestModels.SubmitReimbursementUpdateRequest;
 import org.RestModels.UpdateAccountInfo;
-import org.RestModels.sendReimbursementRequest;
+import org.RestModels.SendReimbursementRequest;
 import org.models.Manager;
 import org.models.Person;
 import org.models.ReimbursementRequest;
@@ -74,9 +74,9 @@ public class Api extends HttpServlet {
 
     } else if (Utils.apiEndPointMatch(req, "submit-request")) { // submit-request
       String body = Utils.readReqBody(req);
-      sendReimbursementRequest rr = mapper.readValue(body, sendReimbursementRequest.class);
+      SendReimbursementRequest rr = mapper.readValue(body, SendReimbursementRequest.class);
       Response response = new Response();
-      if (reimServ.employeeSendReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
+      if (reimServ.employeeSendReimbursementRequest(rr, (String) req.getSession().getAttribute("email")) != null) {
         response.setIsSuccess(true);
         response.setMsg("Reimbursement request sent");
       } else {

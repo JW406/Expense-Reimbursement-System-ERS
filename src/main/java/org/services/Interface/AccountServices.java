@@ -65,4 +65,10 @@ public interface AccountServices {
    * @return Boolean
    */
   Boolean employeeChangeManager(String email, EmployeeChangeManagerRequest rr);
+
+  /**
+   * @param email
+   * @return Boolean
+   */
+  Boolean deleteAnAccount(String email);
 }
