@@ -100,7 +100,7 @@ public class ReimbursementServiceImpl implements ReimbursementService {
     try {
       int idx = 0;
       res = sess.createQuery(
-          "from ReimbursementRequest r where r.state = ?1 and r.requestedByEmployee in (select e.id from Employee e where e.manager.id = ?2)")
+          "from ReimbursementRequest r where r.state = ?1 and r.requestedByEmployee in (select e.id from Employee e where e.manager.id = ?2) order by r.tsDate DESC")
           .setParameter(++idx, state).setParameter(++idx, manager.getId()).list();
     } catch (Exception e) {
       log.warn(e.getMessage());

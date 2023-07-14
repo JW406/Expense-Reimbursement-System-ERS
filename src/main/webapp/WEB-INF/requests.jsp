@@ -28,7 +28,7 @@
     </div>
   </div>
   <script>
-    let tbody
+    let __tbody
 
     function employeeRequestActions(state) {
       return (e) => {
@@ -75,17 +75,23 @@
       $('body > .modal .modal-text').focus()
     }
 
+    let __dataTablePtr
     function populateManagerTable(state) {
-      tbody.find('.btn-approve').unbind()
-      tbody.find('.btn-decline').unbind()
-      tbody.find('.btn-resend').unbind()
-      tbody.find('.btn-comment').unbind()
-      tbody.html('')
+      __tbody.find('.btn-approve').unbind()
+      __tbody.find('.btn-decline').unbind()
+      __tbody.find('.btn-resend').unbind()
+      __tbody.find('.btn-comment').unbind()
+      __tbody.html('')
       fetch(window.__ctx + `/api/getManagedEmployeeRequests?state=\${state}`, {
         method: 'GET',
       }).then((resp) => resp.json()).then((data) => {
-        if (data == null || !data.length) { return }
-        tbody.html('')
+        __dataTablePtr?.fnClearTable()
+        __dataTablePtr?.fnDestroy()
+        if (data == null || !data.length) {
+          __dataTablePtr = $('.reimbursement-table').dataTable()
+          return
+        }
+        __tbody.html('')
         for (const d of data) {
           const row = $('<tr>')
           row.append(`<td class="w-25">\${dateFmt("yyyy-MM-dd hh:mm:ss", new Date(d['tsDate']))}</td>`)
@@ -106,27 +112,32 @@
           }
           actionCell.find('.btn-comment').data({ comment: d['mgrComment'] })
           row.append(actionCell)
-          tbody.append(row)
+          __tbody.append(row)
         }
-        tbody.find('.btn-approve').click(managerRequestActions('approved'))
-        tbody.find('.btn-decline').click(managerRequestActions('declined'))
-        tbody.find('.btn-resend').click(managerRequestActions('active'))
-        tbody.find('.btn-comment').click(managerCommentPopup)
+        __dataTablePtr = $('.reimbursement-table').dataTable()
+        __tbody.find('.btn-approve').click(managerRequestActions('approved'))
+        __tbody.find('.btn-decline').click(managerRequestActions('declined'))
+        __tbody.find('.btn-resend').click(managerRequestActions('active'))
+        __tbody.find('.btn-comment').click(managerCommentPopup)
       })
     }
 
     function populateEmployeeTable(state) {
-      tbody.find('.btn-approve').unbind()
-      tbody.find('.btn-decline').unbind()
-      tbody.find('.btn-resend').unbind()
-      tbody.find('.btn-recall').unbind()
-      tbody.html('')
+      __tbody.find('.btn-resend').unbind()
+      __tbody.find('.btn-recall').unbind()
+      __tbody.find('.btn-view-comment').unbind()
+      __tbody.html('')
       fetch(window.__ctx + `/api/requestsTable?state=\${state}`, {
         method: 'GET',
       }
       ).then((resp) => resp.json()).then((data) => {
-        if (data == null || !data.length) { return }
-        tbody.html('')
+        __dataTablePtr?.fnClearTable()
+        __dataTablePtr?.fnDestroy()
+        if (data == null || !data.length) {
+          __dataTablePtr = $('.reimbursement-table').dataTable()
+          return
+        }
+        __tbody.html('')
         for (const d of data) {
           const row = $('<tr>')
           row.append(`<td class="active w-33">\${dateFmt("yyyy-MM-dd hh:mm:ss", new Date(d['tsDate']))}</td>`)
@@ -142,21 +153,25 @@
             )
           } else {
             actionCell.append(
-              `<button type="button" class="btn btn-primary btn-sm" disabled data-id="\${d['id']}">Void</button>`
+              `<button type="button" class="btn btn-primary btn-sm btn-view-comment" data-id="\${d['id']}">View Comment</button>`
             )
+            actionCell.find('.btn-view-comment').data({ comment: d['mgrComment'] })
           }
           row.append(actionCell)
-          tbody.append(row)
+          __tbody.append(row)
         }
-        tbody.find('.btn-approve').click(employeeRequestActions('approved'))
-        tbody.find('.btn-decline').click(employeeRequestActions('declined'))
-        tbody.find('.btn-resend').click(employeeRequestActions('active'))
-        tbody.find('.btn-recall').click(employeeRequestActions('recalled'))
+        __dataTablePtr = $('.reimbursement-table').dataTable()
+        __tbody.find('.btn-resend').click(employeeRequestActions('active'))
+        __tbody.find('.btn-recall').click(employeeRequestActions('recalled'))
+        __tbody.find('.btn-view-comment').click(function () {
+          $('.modal .modal-body > p').text($(this).data()['comment'])
+          $('.modal').show()
+        })
       })
     }
 
     $(() => {
-      tbody = $('.reimbursement-table tbody')
+      __tbody = $('.reimbursement-table tbody')
 
       if (!getIsAdmin()) {
         const thead = $('.reimbursement-table thead tr')
