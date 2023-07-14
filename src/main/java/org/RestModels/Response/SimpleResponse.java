@@ -1,6 +1,6 @@
-package org.RestModels;
+package org.RestModels.Response;
 
-public class Response {
+public class SimpleResponse {
   private String msg;
   private Boolean isSuccess;
 

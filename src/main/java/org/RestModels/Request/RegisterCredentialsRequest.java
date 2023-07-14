@@ -1,6 +1,6 @@
-package org.RestModels;
+package org.RestModels.Request;
 
-public class RegisterCredentials {
+public class RegisterCredentialsRequest {
   private String email;
   private String password;
   private String name;

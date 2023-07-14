@@ -11,10 +11,10 @@ import org.hibernate.cfg.Configuration;
 /**
  * Database connection utility class
  */
-public class DBUtils {
+public class DBConnUtil {
   private static SessionFactory sessionFactory;
   static {
-    URL url = DBUtils.class.getClassLoader().getResource("hibernate.cfg.xml");
+    URL url = DBConnUtil.class.getClassLoader().getResource("hibernate.cfg.xml");
     File hibernateCfg = null;
     try {
       if (url == null) {

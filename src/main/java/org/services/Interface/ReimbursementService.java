@@ -2,8 +2,8 @@ package org.services.Interface;
 
 import java.util.List;
 
-import org.RestModels.SubmitReimbursementUpdateRequest;
-import org.RestModels.SendReimbursementRequest;
+import org.RestModels.Request.SendReimbursementRequest;
+import org.RestModels.Request.SubmitReimbursementUpdateRequest;
 import org.models.ReimbursementRequest;
 import org.models.ReimbursementState;
 

@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Date;
 import java.util.List;
 
-import org.RestModels.EmployeeChangeManagerRequest;
-import org.RestModels.LoginCredentials;
-import org.RestModels.PasswordChangeRequest;
-import org.RestModels.RegisterCredentials;
-import org.RestModels.SendReimbursementRequest;
-import org.RestModels.SubmitReimbursementUpdateRequest;
-import org.RestModels.UpdateAccountInfo;
+import org.RestModels.Request.EmployeeChangeManagerRequest;
+import org.RestModels.Request.LoginCredentialsRequest;
+import org.RestModels.Request.PasswordChangeRequest;
+import org.RestModels.Request.RegisterCredentialsRequest;
+import org.RestModels.Request.SendReimbursementRequest;
+import org.RestModels.Request.SubmitReimbursementUpdateRequest;
+import org.RestModels.Request.UpdateAccountInfoRequest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -33,12 +33,12 @@ public class ServicesTest {
 
   @BeforeAll
   public static void init() {
-    RegisterCredentials managerCredentials = new RegisterCredentials();
+    RegisterCredentialsRequest managerCredentials = new RegisterCredentialsRequest();
     managerCredentials.setEmail(managerEmail);
     managerCredentials.setIsManager(true);
     managerCredentials.setPassword("123");
     accSrv.registerAccount(managerCredentials);
-    RegisterCredentials employeeCredentials = new RegisterCredentials();
+    RegisterCredentialsRequest employeeCredentials = new RegisterCredentialsRequest();
     employeeCredentials.setEmail(employeeEmail);
     employeeCredentials.setIsManager(false);
     employeeCredentials.setPassword("123");
@@ -59,7 +59,7 @@ public class ServicesTest {
 
   @Test
   void testUserLogIn() {
-    LoginCredentials loginCredentials = new LoginCredentials();
+    LoginCredentialsRequest loginCredentials = new LoginCredentialsRequest();
     loginCredentials.setEmail(employeeEmail);
     loginCredentials.setPassword("123");
     assertNotNull(accSrv.loginAccount(loginCredentials));
@@ -107,7 +107,7 @@ public class ServicesTest {
 
   @Test
   void testUserUpdateInfo() {
-    UpdateAccountInfo updateAccountInfo = new UpdateAccountInfo();
+    UpdateAccountInfoRequest updateAccountInfo = new UpdateAccountInfoRequest();
     updateAccountInfo.setFullName("helloworld");
     updateAccountInfo.setGitHubUsername("helloworld2");
     updateAccountInfo.setPhoneNumber("999999");

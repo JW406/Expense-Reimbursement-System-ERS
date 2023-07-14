@@ -12,11 +12,9 @@
     <property name="hibernate.connection.username"></property>
     <property name="hibernate.connection.password"></property>
 
-    <!-- driver spec-->
     <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
     <property name="hibernate.dialect">org.hibernate.dialect.Oracle8iDialect</property>
 
-    <!-- make things nice-->
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.format_sql">true</property>
 

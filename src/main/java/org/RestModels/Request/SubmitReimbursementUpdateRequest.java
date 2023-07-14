@@ -1,4 +1,4 @@
-package org.RestModels;
+package org.RestModels.Request;
 
 import org.models.ReimbursementState;
 

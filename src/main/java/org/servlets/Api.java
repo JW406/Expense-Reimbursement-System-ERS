@@ -12,16 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.Utils;
-import org.RestModels.EmployeeChangeManagerRequest;
-import org.RestModels.LoginCredentials;
-import org.RestModels.LoginResponse;
-import org.RestModels.PasswordChangeRequest;
-import org.RestModels.RegisterCredentials;
-import org.RestModels.Response;
-import org.RestModels.SubmitReimbursementUpdateRequest;
-import org.RestModels.UpdateAccountInfo;
-import org.RestModels.SendReimbursementRequest;
+import org.HttpServletRequestUtils;
+import org.RestModels.Request.EmployeeChangeManagerRequest;
+import org.RestModels.Request.LoginCredentialsRequest;
+import org.RestModels.Request.PasswordChangeRequest;
+import org.RestModels.Request.RegisterCredentialsRequest;
+import org.RestModels.Request.SendReimbursementRequest;
+import org.RestModels.Request.SubmitReimbursementUpdateRequest;
+import org.RestModels.Request.UpdateAccountInfoRequest;
+import org.RestModels.Response.LoginResponse;
+import org.RestModels.Response.SimpleResponse;
 import org.models.Manager;
 import org.models.Person;
 import org.models.ReimbursementRequest;
@@ -41,9 +41,9 @@ public class Api extends HttpServlet {
     PrintWriter out = resp.getWriter();
     ObjectMapper mapper = new ObjectMapper();
 
-    if (Utils.apiEndPointMatch(req, "login")) { // "login"
-      String body = Utils.readReqBody(req);
-      LoginCredentials lc = mapper.readValue(body, LoginCredentials.class);
+    if (HttpServletRequestUtils.apiEndPointMatch(req, "login")) { // "login"
+      String body = HttpServletRequestUtils.readReqBody(req);
+      LoginCredentialsRequest lc = mapper.readValue(body, LoginCredentialsRequest.class);
       LoginResponse loginResponse = new LoginResponse();
       Person p = accServ.loginAccount(lc);
       if (p != null) {
@@ -59,10 +59,10 @@ public class Api extends HttpServlet {
       }
       out.print(mapper.writeValueAsString(loginResponse));
 
-    } else if (Utils.apiEndPointMatch(req, "register")) { // "register"
-      String body = Utils.readReqBody(req);
-      RegisterCredentials rc = mapper.readValue(body, RegisterCredentials.class);
-      Response response = new Response();
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "register")) { // "register"
+      String body = HttpServletRequestUtils.readReqBody(req);
+      RegisterCredentialsRequest rc = mapper.readValue(body, RegisterCredentialsRequest.class);
+      SimpleResponse response = new SimpleResponse();
       if (accServ.registerAccount(rc)) {
         response.setIsSuccess(true);
         response.setMsg("Register Success");
@@ -72,10 +72,10 @@ public class Api extends HttpServlet {
       }
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "submit-request")) { // submit-request
-      String body = Utils.readReqBody(req);
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "submit-request")) { // submit-request
+      String body = HttpServletRequestUtils.readReqBody(req);
       SendReimbursementRequest rr = mapper.readValue(body, SendReimbursementRequest.class);
-      Response response = new Response();
+      SimpleResponse response = new SimpleResponse();
       if (reimServ.employeeSendReimbursementRequest(rr, (String) req.getSession().getAttribute("email")) != null) {
         response.setIsSuccess(true);
         response.setMsg("Reimbursement request sent");
@@ -85,10 +85,10 @@ public class Api extends HttpServlet {
       }
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "request-update")) { // request-update
-      String body = Utils.readReqBody(req);
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "request-update")) { // request-update
+      String body = HttpServletRequestUtils.readReqBody(req);
       SubmitReimbursementUpdateRequest rr = mapper.readValue(body, SubmitReimbursementUpdateRequest.class);
-      Response response = new Response();
+      SimpleResponse response = new SimpleResponse();
       if (reimServ.updateReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
         response.setIsSuccess(true);
         response.setMsg("Reimbursement request update successful");
@@ -98,10 +98,10 @@ public class Api extends HttpServlet {
       }
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "info-update")) { // info-update
-      String body = Utils.readReqBody(req);
-      UpdateAccountInfo updateAccountInfo = mapper.readValue(body, UpdateAccountInfo.class);
-      Response response = new Response();
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "info-update")) { // info-update
+      String body = HttpServletRequestUtils.readReqBody(req);
+      UpdateAccountInfoRequest updateAccountInfo = mapper.readValue(body, UpdateAccountInfoRequest.class);
+      SimpleResponse response = new SimpleResponse();
 
       if (accServ.updateAccountInfo(updateAccountInfo, (String) req.getSession().getAttribute("email"))) {
         response.setIsSuccess(true);
@@ -113,10 +113,10 @@ public class Api extends HttpServlet {
 
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "password-change")) { // password-change
-      String body = Utils.readReqBody(req);
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "password-change")) { // password-change
+      String body = HttpServletRequestUtils.readReqBody(req);
       PasswordChangeRequest passwordChangeRequest = mapper.readValue(body, PasswordChangeRequest.class);
-      Response response = new Response();
+      SimpleResponse response = new SimpleResponse();
 
       if (accServ.updateAccountPassword(passwordChangeRequest, (String) req.getSession().getAttribute("email"))) {
         response.setIsSuccess(true);
@@ -128,10 +128,10 @@ public class Api extends HttpServlet {
 
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "manager-actions")) { // manager-actions
-      String body = Utils.readReqBody(req);
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "manager-actions")) { // manager-actions
+      String body = HttpServletRequestUtils.readReqBody(req);
       SubmitReimbursementUpdateRequest rr = mapper.readValue(body, SubmitReimbursementUpdateRequest.class);
-      Response response = new Response();
+      SimpleResponse response = new SimpleResponse();
 
       if (reimServ.managerAcceptReimbursementRequest(rr, (String) req.getSession().getAttribute("email"))) {
         response.setIsSuccess(true);
@@ -143,10 +143,10 @@ public class Api extends HttpServlet {
 
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "manager-update-request-comment")) { // manager-update-request-comment
-      String body = Utils.readReqBody(req);
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "manager-update-request-comment")) { // manager-update-request-comment
+      String body = HttpServletRequestUtils.readReqBody(req);
       SubmitReimbursementUpdateRequest rr = mapper.readValue(body, SubmitReimbursementUpdateRequest.class);
-      Response response = new Response();
+      SimpleResponse response = new SimpleResponse();
 
       if (reimServ.managerReimbursementRequestComment(rr, (String) req.getSession().getAttribute("email"))) {
         response.setIsSuccess(true);
@@ -158,10 +158,10 @@ public class Api extends HttpServlet {
 
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "employee-change-manager")) { // employee-change-manager
-      String body = Utils.readReqBody(req);
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "employee-change-manager")) { // employee-change-manager
+      String body = HttpServletRequestUtils.readReqBody(req);
       EmployeeChangeManagerRequest rr = mapper.readValue(body, EmployeeChangeManagerRequest.class);
-      Response response = new Response();
+      SimpleResponse response = new SimpleResponse();
 
       if (accServ.employeeChangeManager((String) req.getSession().getAttribute("email"), rr)) {
         response.setIsSuccess(true);
@@ -182,20 +182,20 @@ public class Api extends HttpServlet {
     PrintWriter out = resp.getWriter();
     ObjectMapper mapper = new ObjectMapper();
 
-    if (Utils.apiEndPointMatch(req, "requestsTable")) { // requestsTable
+    if (HttpServletRequestUtils.apiEndPointMatch(req, "requestsTable")) { // requestsTable
       ReimbursementState state = ReimbursementState.valueOf(req.getParameter("state"));
       List<ReimbursementRequest> response = reimServ
           .getReimbursementRequestsByLoggedInEmail((String) req.getSession().getAttribute("email"), state);
       out.print(mapper.writeValueAsString(response));
 
-    } else if (Utils.apiEndPointMatch(req, "logout")) { // logout
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "logout")) { // logout
       req.getSession().removeAttribute("email");
 
-    } else if (Utils.apiEndPointMatch(req, "get-accountinfo")) { // get-accountinfo
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "get-accountinfo")) { // get-accountinfo
       Person person = accServ.getPersonRecordByEmail((String) req.getSession().getAttribute("email"));
       out.print(mapper.writeValueAsString(person));
 
-    } else if (Utils.apiEndPointMatch(req, "getManagedEmployeeRequests")) { // getManagedEmployeeRequests
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "getManagedEmployeeRequests")) { // getManagedEmployeeRequests
       if ((Boolean) req.getSession().getAttribute("ismanager")) {
         ReimbursementState state = ReimbursementState.valueOf(req.getParameter("state"));
         List<ReimbursementRequest> response = reimServ
@@ -203,11 +203,11 @@ public class Api extends HttpServlet {
         out.print(mapper.writeValueAsString(response));
       }
 
-    } else if (Utils.apiEndPointMatch(req, "getManagedEmployees")) { // getManagedEmployees
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "getManagedEmployees")) { // getManagedEmployees
       out.print(
           mapper.writeValueAsString(accServ.getAllEmployeesByManager((String) req.getSession().getAttribute("email"))));
 
-    } else if (Utils.apiEndPointMatch(req, "get-all-managers")) { // get-all-managers
+    } else if (HttpServletRequestUtils.apiEndPointMatch(req, "get-all-managers")) { // get-all-managers
       if (req.getSession().getAttribute("email") == null) {
         out.print(mapper.writeValueAsString(new ArrayList<>()));
       } else {

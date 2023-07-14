@@ -1,4 +1,4 @@
-package org.RestModels;
+package org.RestModels.Request;
 
 public class PasswordChangeRequest {
   private String oldPassword;
