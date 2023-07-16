@@ -53,7 +53,7 @@
           if (d['isSuccess']) {
             ev.target['passwordInput'].value = ''
             ev.target['repeatPasswordInput'].value = ''
-            alert(d['msg'])
+            modalShow({ body: d['msg'] })
           } else {
             $('.err-msg').text(d.msg)
           }

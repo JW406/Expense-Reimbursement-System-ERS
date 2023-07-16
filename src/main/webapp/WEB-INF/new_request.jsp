@@ -41,8 +41,7 @@
       }
       ).then((resp) => resp.json()).then((d) => {
         if (d['isSuccess']) {
-          alert(d['msg'])
-          window.location.href = window.__ctx + '/requests'
+          modalShow({ body: d['msg'], onclose: () => window.location.href = window.__ctx + '/requests' })
         } else {
           $('.err-msg').text(d.msg)
         }

@@ -81,6 +81,7 @@
       __tbody.find('.btn-decline').unbind()
       __tbody.find('.btn-resend').unbind()
       __tbody.find('.btn-comment').unbind()
+      __tbody.find('.btn-reason').unbind()
       __tbody.html('')
       fetch(window.__ctx + `/api/getManagedEmployeeRequests?state=\${state}`, {
         method: 'GET',
@@ -103,13 +104,17 @@
               `<button type="button" class="btn btn-primary btn-sm mr-2 btn-approve" data-id="\${d['id']}">Approve</button>`
             )
             actionCell.append(
-              `<button type="button" class="btn btn-danger btn-sm btn-decline" data-id="\${d['id']}">Decline</button>`
+              `<button type="button" class="btn btn-danger btn-sm mr-2 btn-decline" data-id="\${d['id']}">Decline</button>`
             )
           } else if (state === 'approved' || state === 'declined') {
             actionCell.append(
-              `<button type="button" class="btn btn-primary btn-sm btn-comment" data-id="\${d['id']}">Comment</button>`
+              `<button type="button" class="btn btn-primary btn-sm mr-2 btn-comment" data-id="\${d['id']}">Comment</button>`
             )
           }
+          actionCell.append(
+            `<button type="button" class="btn btn-warning btn-sm mr-2 btn-reason data-id="\${d['id']}">Reason</button>`
+          )
+          actionCell.find('.btn-reason').click(() => modalShow({ title: 'Reason', body: d['requestReason'] || '&lt;No Reason&gt;' }))
           actionCell.find('.btn-comment').data({ comment: d['mgrComment'] })
           row.append(actionCell)
           __tbody.append(row)
@@ -126,6 +131,7 @@
       __tbody.find('.btn-resend').unbind()
       __tbody.find('.btn-recall').unbind()
       __tbody.find('.btn-view-comment').unbind()
+      __tbody.find('.btn-reason').unbind()
       __tbody.html('')
       fetch(window.__ctx + `/api/requestsTable?state=\${state}`, {
         method: 'GET',
@@ -145,18 +151,22 @@
           const actionCell = $('<td class="w-33">')
           if (state === 'active') {
             actionCell.append(
-              `<button type="button" class="btn btn-primary btn-sm btn-recall" data-id="\${d['id']}">Recall</button>`
+              `<button type="button" class="btn btn-primary btn-sm mr-2 btn-recall" data-id="\${d['id']}">Recall</button>`
             )
           } else if (state === 'recalled') {
             actionCell.append(
-              `<button type="button" class="btn btn-primary btn-sm btn-resend" data-id="\${d['id']}">Resend</button>`
+              `<button type="button" class="btn btn-primary btn-sm mr-2 btn-resend" data-id="\${d['id']}">Resend</button>`
             )
           } else {
             actionCell.append(
-              `<button type="button" class="btn btn-primary btn-sm btn-view-comment" data-id="\${d['id']}">View Comment</button>`
+              `<button type="button" class="btn btn-primary btn-sm mr-2 btn-view-comment" data-id="\${d['id']}">View Comment</button>`
             )
-            actionCell.find('.btn-view-comment').data({ comment: d['mgrComment'] })
+            actionCell.find('.btn-view-comment').data({ comment: d['mgrComment'] || '<No Comment>' })
           }
+          actionCell.append(
+            `<button type="button" class="btn btn-warning btn-sm mr-2 btn-reason data-id="\${d['id']}">Reason</button>`
+          )
+          actionCell.find('.btn-reason').click(() => modalShow({ title: 'Reason', body: d['requestReason'] || '&lt;No Reason&gt;' }))
           row.append(actionCell)
           __tbody.append(row)
         }
