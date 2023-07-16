@@ -26,22 +26,39 @@ public class ReimbursementRequest {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PROJ01_REIMB_REQ_SEQ")
   @SequenceGenerator(name = "PROJ01_REIMB_REQ_SEQ", sequenceName = "PROJ01_REIMB_REQ_S", allocationSize = 1)
   private Integer id;
+
   @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
   @JoinColumn(name = "requested_by", referencedColumnName = "id")
   private Employee requestedByEmployee;
+
   @Column(name = "request_amnt")
   private Double reqAmnt;
+
   @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
   @JoinColumn(name = "handled_by", referencedColumnName = "id")
   private Manager handledByManager;
+
   @Column
   @Temporal(TemporalType.TIMESTAMP)
   private Date tsDate;
+
   @Column
   @Enumerated(EnumType.STRING)
   private ReimbursementState state;
+
   @Column
   private String mgrComment;
+
+  @Column(name = "request_reason")
+  private String requestReason;
+
+  public String getRequestReason() {
+    return requestReason;
+  }
+
+  public void setRequestReason(String requestReason) {
+    this.requestReason = requestReason;
+  }
 
   public String getMgrComment() {
     return mgrComment;
@@ -102,7 +119,7 @@ public class ReimbursementRequest {
   @Override
   public String toString() {
     return "ReimbursementRequest [handledByManager=" + handledByManager + ", id=" + id + ", mgrComment=" + mgrComment
-        + ", reqAmnt=" + reqAmnt + ", requestedByEmployee=" + requestedByEmployee + ", state=" + state + ", tsDate="
-        + tsDate + "]";
+        + ", reqAmnt=" + reqAmnt + ", requestReason=" + requestReason + ", requestedByEmployee=" + requestedByEmployee
+        + ", state=" + state + ", tsDate=" + tsDate + "]";
   }
 }

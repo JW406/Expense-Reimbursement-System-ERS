@@ -26,6 +26,7 @@ public class Manager extends Person {
   @SequenceGenerator(name = "PROJ01_MGR_SEQ", sequenceName = "PROJ01_MGR_S", allocationSize = 1)
   @Column
   private Integer id;
+
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "manager")
   private List<Employee> managedEmployees;
 

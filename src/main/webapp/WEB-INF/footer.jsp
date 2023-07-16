@@ -32,7 +32,7 @@
               </li>
             `)
       $('.modal-body').append(`
-        <textarea class="modal-text" type="text" style="width:100%;height:100%;">
+        <textarea class="modal-text" style="width:100%;height:100%;">
           </textarea>
         </div>
       `)
