@@ -23,28 +23,29 @@
     </form>
   </div>
   <script>
-    document.getElementById('login').addEventListener('submit', (ev) => {
-      ev.preventDefault()
-      $('.err-msg').text('')
-      const email = ev.target['emailInput'].value
-      const password = ev.target['passwordInput'].value
-      fetch(window.__ctx + '/api/login', {
-        method: 'POST',
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-        body: JSON.stringify({ email, password }),
-      }
-      ).then((resp) => resp.json()).then((d) => {
-        if (d['isSuccess']) {
-          window.localStorage.setItem('username', d['username'])
-          window.localStorage.setItem('ismanager', d['isManager'])
-          window.location.href = window.__ctx + '/home';
-        } else {
-          $('.err-msg').text(d.msg)
+    $(() => {
+      document.getElementById('login').addEventListener('submit', (ev) => {
+        ev.preventDefault()
+        $('.err-msg').text('')
+        const email = ev.target['emailInput'].value
+        const password = ev.target['passwordInput'].value
+        fetch(window.__ctx + '/api/login', {
+          method: 'POST',
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify({ email, password }),
         }
+        ).then((resp) => resp.json()).then((d) => {
+          if (d['isSuccess']) {
+            window.localStorage.setItem('username', d['username'])
+            window.localStorage.setItem('ismanager', d['isManager'])
+            window.location.href = window.__ctx + '/home';
+          } else {
+            $('.err-msg').text(d.msg)
+          }
+        })
       })
     })
-
   </script>
   <jsp:include page="footer.jsp" />
